@@ -12,7 +12,7 @@ private:
 	 * pointer to assign courses
 	 */
 	CStudentDb &db;
-	CWeeklyCourse *course;
+	//CWeeklyCourse *course;
 	//CStudent &student;
 
 public:
