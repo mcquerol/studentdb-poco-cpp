@@ -12,7 +12,7 @@ protected:
 	 * static map to keep track of major by char/string
 	 * as well as course info
 	 */
-    //static std::map<unsigned char, std::string> majorById;
+    static std::map<unsigned char, std::string> majorById;
     unsigned int courseKey;
     std::string title;
     unsigned char major;

@@ -11,10 +11,10 @@ CCourse::CCourse(unsigned int courseKey, std::string title, unsigned char major,
 	this->major = major;
 	this->creditPoints = creditPoints;
 
-//	this->majorById.insert({'A', "Automation"});
-//	this->majorById.insert({'C', "Communications"});
-//	this->majorById.insert({'E', "Embedded"});
-//	this->majorById.insert({'P', "Power"});
+	majorById.insert({'A', "Automation"});
+	majorById.insert({'C', "Communications"});
+	majorById.insert({'E', "Embedded"});
+	majorById.insert({'P', "Power"});
 
 }
 
