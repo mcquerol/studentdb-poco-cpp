@@ -23,7 +23,8 @@ public:
      * CBlockCourse constructor
      * inherits from the CCourse class
      */
-    CBlockCourse(unsigned int courseKey, std::string title, unsigned char major, float creditPoints);
+	CBlockCourse(unsigned int courseKey, std::string title, std::string major, float creditPoints,Poco::Data::Date startDate,
+	        Poco::Data::Date endDate,Poco::Data::Time startTime,Poco::Data::Time endTime);
 
     /*
      * Empty destructor
@@ -43,5 +44,6 @@ public:
  	void setStartDate(const Poco::Data::Date &startDate);
  	void setEndDate(const Poco::Data::Date &endDate);
 
+    //TODO remove the setters and add the times into the consstructor
 };
 #endif /* CBLOCKCOURSE_H */

@@ -4,13 +4,13 @@
  * CBlockCourse constructor
  * inherits from the CCourse class
  */
-CBlockCourse::CBlockCourse(unsigned int courseKey, std::string title, unsigned char major, float creditPoints)
-: CCourse(courseKey,title,major,creditPoints)
+CBlockCourse::CBlockCourse(unsigned int courseKey, std::string title, std::string major, float creditPoints,Poco::Data::Date startDate,
+		Poco::Data::Date endDate,Poco::Data::Time startTime, Poco::Data::Time endTime)
 {
-	this->courseKey = courseKey;
-	this->title = title;
-	this->major = major;
-	this->creditPoints = creditPoints;
+	this->startDate=startDate;
+	this->endDate=endDate;
+	this->startTime=startTime;
+	this->endTime=endTime;
 }
 
 /*

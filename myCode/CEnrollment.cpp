@@ -1,27 +1,28 @@
 #include "CEnrollment.h"
 
-CEnrollment::CEnrollment(std::string semester, CCourse *course) : course{course}
+CEnrollment::CEnrollment(std::string semester, CCourse *course) : semester{semester}, course{course}
 {
-	this->grade = -1; //can be changed later
-	this->semester = semester;
+	grade = 0.0; // initial grade is 0.0
 }
 
 float CEnrollment::getGrade() const
 {
-	return this->grade;
+	return grade;
 }
 
 std::string CEnrollment::getSemester() const
 {
-	return this->semester;
+	return semester;
 }
 
 const CCourse* CEnrollment::getCourse() const
 {
-	return this->course;
+	return course;
 }
 
 void CEnrollment::setGrade(float grade)
 {
 	this->grade = grade;
 }
+
+//TODO check why this was implemented ^^^^

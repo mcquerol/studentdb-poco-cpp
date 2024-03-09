@@ -31,7 +31,7 @@ CAddress::~CAddress()
  */
 const std::string& CAddress::getAdditionalInfo() const
 {
-	return this->additionalInfo;
+	return additionalInfo;
 }
 
 /*
@@ -39,7 +39,7 @@ const std::string& CAddress::getAdditionalInfo() const
  */
 const std::string& CAddress::getCityName() const
 {
-	return this->cityName;
+	return cityName;
 }
 
 /*
@@ -47,7 +47,7 @@ const std::string& CAddress::getCityName() const
  */
 unsigned short CAddress::getPostalCode() const
 {
-	return this->postalCode;
+	return postalCode;
 }
 
 /*
@@ -55,5 +55,5 @@ unsigned short CAddress::getPostalCode() const
  */
 const std::string& CAddress::getStreet() const
 {
-	return this->street;
+	return street;
 }

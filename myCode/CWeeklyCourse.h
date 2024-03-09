@@ -15,7 +15,7 @@ private:
 
 public:
 
-    CWeeklyCourse(unsigned int courseKey, std::string title, unsigned char major, float creditPoints);
+    CWeeklyCourse(unsigned int courseKey, std::string title, std::string major, float creditPoints);
     ~CWeeklyCourse();
 
     Poco::DateTime::DaysOfWeek getDayOfWeek() const;

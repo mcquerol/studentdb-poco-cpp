@@ -15,13 +15,10 @@ private:
     std::string firstName;
     std::string lastName;
     Poco::Data::Date dateOfBirth;
-    /**
-     * @link aggregationByValue
-     */
-    std::vector<CEnrollment> enrollments;
-    /**
-     * @link aggregationByValue
-     */
+
+
+    std::vector<CEnrollment> enrollments; //TODO check the implementation of this..must add an enrollment
+
 
 public:
     CStudent(std::string firstName, std::string lastName, Poco::Data::Date dateOfBirth, std::string street, unsigned short postalCode, std::string cityName, std::string additionalInfo);

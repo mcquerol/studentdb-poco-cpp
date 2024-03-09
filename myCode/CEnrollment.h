@@ -8,9 +8,7 @@ class CEnrollment {
 private:
     float grade;
     std::string semester;
-    /**
-     * @link aggregation
-     */
+
    const CCourse* course;
 public:
     CEnrollment(std::string semester, CCourse* course);

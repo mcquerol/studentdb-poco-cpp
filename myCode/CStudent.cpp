@@ -10,7 +10,7 @@ CStudent::CStudent(std::string firstName, std::string lastName, Poco::Data::Date
 	this->firstName = firstName;
 	this->lastName = lastName;
 	this->dateOfBirth = dateOfBirth;
-	this->maktrikelNumber = CStudent::nextMatrikelNumber++;
+	this->maktrikelNumber = CStudent::nextMatrikelNumber++; //TODO check syntax here maybe remove the CStudent::
 }
 
 const unsigned int CStudent::getMatrikelNumber() const

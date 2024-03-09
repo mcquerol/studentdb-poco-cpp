@@ -8,12 +8,7 @@
 class CSimpleUI {
 private:
 
-	/*
-	 * pointer to assign courses
-	 */
 	CStudentDb &db;
-	//CWeeklyCourse *course;
-	//CStudent &student;
 
 public:
 	/*

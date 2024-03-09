@@ -14,7 +14,7 @@ CStudentDb::CStudentDb()
 
 const std::map<int, std::unique_ptr<const CCourse> >& CStudentDb::getCourses() const
 {
-	return courses;
+	return std::move(courses);
 }
 
 const std::map<int, CStudent>& CStudentDb::getStudents() const
@@ -22,21 +22,43 @@ const std::map<int, CStudent>& CStudentDb::getStudents() const
 	return students;
 }
 
-/*
- * the index of the course map is the course key and using the std::move function
- * the pointer can be assigned to the course key
- */
-void CStudentDb::setCourse(CCourse *course)
-{
-	this->courses[course->getCourseKey()] = std::move(std::unique_ptr<CCourse>(course));
+ 
+//  the index of the course map is the course key and using the std::move function
+//  the pointer can be assigned to the course key
+ 
 
+//void CStudentDb::setCourse(CCourse *course)
+//{
+//	this->courses[course->getCourseKey()] = std::move(std::unique_ptr<CCourse>(course));
+//}
+
+///*
+// * in this map, the student matrikel number serves as the "index"
+// * and is mapped to the student object. unlike the above map this is passed by reference
+// */
+
+
+//void CStudentDb::setStudent(CStudent &student)
+//{
+//	this->students.insert({student.getMatrikelNumber(),student});
+//} 
+
+void CStudentDb::addCourse(unsigned int courseKey, std::unique_ptr <const CCourse> course)
+{
+	courses.insert({courseKey,std::move(course)});
 }
 
-/*
- * in this map, the student matrikel number serves as the "index"
- * and is mapped to the student object. unlike the above map this is passed by reference
- */
-void CStudentDb::setStudent(CStudent &student)
+void CStudentDb::addStudent(CStudent student)
 {
-	this->students.insert({student.getMatrikelNumber(),student});
+	students.insert({student.getMatrikelNumber(),student});
+}
+
+void CStudentDb::setCourses(std::map<int, std::unique_ptr<const CCourse>>& courses)
+{
+	this->courses = std::move(courses);
+}
+
+void CStudentDb::setStudents(std::map<int,CStudent> students)
+{
+	this->students = students;
 }

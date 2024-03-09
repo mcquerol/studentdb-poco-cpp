@@ -18,8 +18,14 @@ using namespace std;
  * constructor for the simple UI
  * takes in a studentDB object and is passed by reference
  */
-CSimpleUI::CSimpleUI(CStudentDb& db) : db(db)
+CSimpleUI::CSimpleUI(CStudentDb& db) : db{db}
 {
+	//Given that this->db=db cannot be written, the individual elements/parameters of the passed db are assign to the db parameter.
+	std::map<int, std::unique_ptr<const CCourse>> courses  = std::move(db.getCourses());
+	std::map<int,CStudent> students = db.getStudents();
+
+	this->db.setCourses(courses);
+	this->db.setStudents(students);
 }
 
 
@@ -36,30 +42,34 @@ CSimpleUI::CSimpleUI(CStudentDb& db) : db(db)
  */
 void CSimpleUI::run()
 {
-	int choice;
+	int choice; // user input
+	char courseType; // create weeklycourse or blockcourse
 
-	/* for case 1 */
+	/* student info */
+	std::string firstname;
+	std::string lastname;
+	int year,month,day;
+	std::string street;
+	int postalcode;
+	std::string cityname;
+	std::string additionalinfo;
+
+	/* course info */
 	unsigned int courseKey;
-	string title;
-	unsigned char major;
+	std::string title;
+	std::string major;
 	float creditPoints;
-	Poco::DateTime::DaysOfWeek dayOfWeek;
+
+	/* weeklyCourse info*/
+	int dayOfWeek;
 	int startHour, startMinute, startSecond;
 	int endHour, endMinute, endSecond;
 
+//	/* blockCourse info*/
+	int startYear, startMonth, startDay;
+	int endYear, endMonth, endDay;
 
 
-	CWeeklyCourse weeklyCourse = new CWeeklyCourse(courseKey,"",major,creditPoints);
-	CBlockCourse blockCourse = new CBlockCourse(courseKey,"",major,creditPoints);
-
-	/* for case 3 */
-	string firstname;
-	string lastname;
-	int year,month,day;
-	string street;
-	int postalcode;
-	string cityname;
-	string additionalinfo;
 
 	/* for case 6 */
 	int matrikelnumber;
@@ -88,26 +98,51 @@ void CSimpleUI::run()
 				case 1:
 					cout << "1. Add new course" << endl;
 
-
 					cout << "Enter Course key: ";
 					cin >> courseKey;
+					cout << endl;
 					cout << "Enter Module title: ";
 					cin >> title;
+					cout << endl;
 					cout << "Enter Major (char): ";
 					cin >> major;
+					cout << endl;
 					cout << "Enter Credit points: ";
 					cin >> creditPoints;
-					cout << "Enter day of the week (0-6): ";
-					cin >> dayOfWeek;
-					cout << "Enter start time (h:m:s:): ";
-					cin >> startHour >> startMinute >> startSecond;
-					cout << "Enter end time (h:m:s:): ";
-					cin >> endHour >> endMinute >> endSecond;
+					cout << endl;
 
-					//this->course->setDayOfWeek(dayOfWeek);
-					//this->course->setStartTime({startHour, startMinute, startSecond});
-					//this->course->setEndTime({endHour, endMinute, endSecond});
-					//db.setCourse(this->course);
+					cout << "Create weekly course or block course (Type 'W' or 'B')? ";
+					cin >> courseType;
+
+
+					//TODO make a helper function which returns the character and maybe use that in the if ?
+
+					if (courseType == 'W') {
+						// Create a unique_ptr to a CWeeklyCourse instance
+						std::unique_ptr<const CCourse> weeklyCourse(new CWeeklyCourse(courseKey, title, major, creditPoints));
+						// Set other attributes of weeklyCourse
+						weeklyCourse->setDayOfWeek((Poco::DateTime::DaysOfWeek)dayOfWeek);
+						weeklyCourse->setStartTime({startHour, startMinute, startSecond});
+						weeklyCourse->setEndTime({endHour, endMinute, 0});
+
+						// Add the course to the database using std::move
+						db.addCourse(courseKey, std::move(weeklyCourse));
+					} else {
+						// Create a unique_ptr to a CBlockCourse instance
+						std::unique_ptr<const CCourse> blockCourse(new CBlockCourse(courseKey, title, major, creditPoints,
+							Poco::Data::Date(startYear, startMonth, startDay), Poco::Data::Date(endYear, endMonth, endDay),
+							Poco::Data::Time(startHour, startMinute, 0), Poco::Data::Time(endHour, endMinute, 0)));
+
+						// Add the course to the database using std::move
+						db.addCourse(courseKey, std::move(blockCourse));
+					}
+
+					// After adding a course to the map
+					std::cout << "Map size after adding course: " << db.getCourses().size() << std::endl;
+					for (const auto& pair : db.getCourses()) {
+						std::cout << "Course key: " << pair.second->getCourseKey() << std::endl;
+						// Print other course details
+					}
 
 					cout << "course added!" << endl;
 
@@ -115,16 +150,20 @@ void CSimpleUI::run()
 			case 2:
 				cout << "2. List courses" << endl;
 
-				for (std::map<int, std::unique_ptr<const CCourse>>::size_type it = 0; it <=db.getCourses().size(); it++)
-				{
-					cout << "Course key: "<< this->course->getCourseKey() << endl;
-					cout << "Module title: "<< this->course->getTitle() << endl;
-					cout << "Major: "<< this->course->getMajor() << endl;
-					cout << "Credit points: "<< this->course->getCreditPoints() << endl;
-					cout << "Day of the week: "<< this->course->getDayOfWeek() << endl;
-					cout << "Start time: "<< this->course->getStartTime().hour() << "." <<this->course->getStartTime().minute() << "." <<this->course->getStartTime().second() <<endl;
-					cout << "End time: "<< this->course->getEndTime().hour() << "." <<this->course->getEndTime().minute() << "." <<this->course->getEndTime().second() << endl;
+				// Iterate over all courses in the database
+				for (auto it = db.getCourses().begin(); it != db.getCourses().end(); ++it) {
+				    const CCourse& course = *(it->second); // Dereference the unique_ptr to get the CCourse reference
+
+				    // Print course information
+				    cout << "Course key: " << course.getCourseKey() << endl;
+				    cout << "Module title: " << course.getTitle() << endl;
+				    cout << "Major: " << course.getMajor() << endl;
+				    cout << "Credit points: " << course.getCreditPoints() << endl;
 				}
+//				    cout << "Day of the week: " << course.getDayOfWeek() << endl;
+//				    cout << "Start time: " << course.getStartTime().hour() << "." << course.getStartTime().minute() << "." << course.getStartTime().second() << endl;
+//				    cout << "End time: " << course.getEndTime().hour() << "." << course.getEndTime().minute() << "." << course.getEndTime().second() << endl;
+//
 
 			break;
 			case 3:
@@ -146,10 +185,9 @@ void CSimpleUI::run()
 				cout << "Enter additional info: ";
 				cin >> additionalinfo;
 
-				//this->student = new CStudent(firstname, lastname, {year,month,day}, street, postalcode, cityname, additionalinfo);
-				this->student = CStudent(firstname, lastname, {year,month,day}, street, postalcode, cityname, additionalinfo);
+				//CStudent student(firstname, lastname, {year,month,day}, street, postalcode, cityname, additionalinfo);
 
-				db.setStudent(this->student);
+				//db.setStudent(student);
 
 				break;
 			case 4:
@@ -162,16 +200,16 @@ void CSimpleUI::run()
 				cout << "6. Search student" << endl;
 
 
-				cin >> matrikelnumber;
 				cout << "enter matrikel number:" << endl;
+				cin >> matrikelnumber;
 
-				cout << "Matrikel number: "<< this->student.getMatrikelNumber() << endl;
-				cout << "first name: "<< this->student.getFirstName() << endl;
-				cout << "last name: "<< this->student.getLastName() << endl;
-				cout << "date of birth: "<< this->student.getDateOfBirth().day() << "." << this->student.getDateOfBirth().month() << "." <<this->student.getDateOfBirth().year() << endl;
-				cout << "street: "<< this->student.address.getStreet() << endl;
-				cout << "postal code: "<< this->student.address.getPostalCode() << endl;
-				cout << "additional info" << this->student.address.getAdditionalInfo() << endl;
+				//cout << "Matrikel number: "<< db.getStudents()[matrikelnumber].getMatrikelNumber() << endl;
+//				cout << "first name: "<< this->student.getFirstName() << endl;
+//				cout << "last name: "<< this->student.getLastName() << endl;
+//				cout << "date of birth: "<< this->student.getDateOfBirth().day() << "." << this->student.getDateOfBirth().month() << "." <<this->student.getDateOfBirth().year() << endl;
+//				cout << "street: "<< this->student.address.getStreet() << endl;
+//				cout << "postal code: "<< this->student.address.getPostalCode() << endl;
+//				cout << "additional info" << this->student.address.getAdditionalInfo() << endl;
 
 				break;
 			case 7:

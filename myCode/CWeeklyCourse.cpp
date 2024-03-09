@@ -1,17 +1,10 @@
 #include "CWeeklyCourse.h"
 
-CWeeklyCourse::CWeeklyCourse(unsigned int courseKey, std::string title, unsigned char major, float creditPoints)
-: CCourse(courseKey,title,major,creditPoints){
-
-	this->courseKey = courseKey;
-	this->title = title;
-	this->major = major;
-	this->creditPoints = creditPoints;
-
-	// the following paramters will be changed through setters
-	this->dayOfWeek = Poco::DateTime::DaysOfWeek::SUNDAY; // default day is sunday
-	this->startTime = -1; // default startTime
-	this->endTime = -1; // default endTime
+CWeeklyCourse::CWeeklyCourse(unsigned int courseKey, std::string title, std::string major, float creditPoints)
+{
+	this->dayOfWeek=0;
+	this->startTime={0,0,0};
+	this->endTime={0,0,0};
 }
 
 CWeeklyCourse::~CWeeklyCourse()
