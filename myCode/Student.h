@@ -22,7 +22,6 @@ private:
 public:
 
 
-
 };
 
 #endif STUDENT_H

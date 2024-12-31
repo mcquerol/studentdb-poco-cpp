@@ -16,7 +16,6 @@ private:
 	unsigned char major;
 	float creditPoints;
 
-
 public:
 
 	virtual ~Course() = 0;

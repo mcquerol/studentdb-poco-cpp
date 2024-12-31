@@ -16,7 +16,6 @@ private:
 public:
 
 
-
 };
 
 #endif WEEKLYCOURSE_H

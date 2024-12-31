@@ -10,7 +10,6 @@ private:
 
 
 
-
 public:
 
 	SimpleUI(StudentDb& db);
