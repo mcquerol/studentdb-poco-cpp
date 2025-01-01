@@ -16,15 +16,15 @@ private:
 	unsigned int matrikelNumber;
 	std::string firstName;
 	std::string lastName;
-	Poco::Data::Date dateofBirth;
+	Poco::Data::Date dateOfBirth;
 	std::vector<Enrollment> enrollments;
 
 public:
 
-	Student(std::string firstName, std::string lastName, Poco::Data::Date dateofBirth, std::vector<Enrollment> enrollments);
+	Student(unsigned int matrikelNumber, std::string firstName, std::string lastName, Poco::Data::Date dateOfBirth, std::vector<Enrollment> enrollments);
 	~Student();
 
-	const Poco::Data::Date& getDateofBirth() const;
+	const Poco::Data::Date& getDateOfBirth() const;
 	const std::vector<Enrollment>& getEnrollments() const;
 	const std::string& getFirstName() const;
 	const std::string& getLastName() const;
