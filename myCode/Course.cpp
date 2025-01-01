@@ -28,7 +28,7 @@ float Course::getCreditPoints() const
 
 unsigned char Course::getMajor() const
 {
-	return majorById[title];
+	return major;
 }
 
 const std::string& Course::getTitle() const
