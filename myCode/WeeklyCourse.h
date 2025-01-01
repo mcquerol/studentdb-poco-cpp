@@ -17,10 +17,6 @@ public:
 
 	WeeklyCourse(Poco::DateTime::DaysOfWeek dayOfWeek, Poco::Data::Time startTime, Poco::Data::Time endTime);
 	~WeeklyCourse();
-
-	void setDayofWeek(Poco::DateTime::DaysOfWeek dayofWeek);
-	void setStartTime(Poco::Data::Time startTime);
-	void setEndTime(Poco::Data::Time EndTime);
 	
 	void getDayOfWeek() const;
 	void getStartTime() const;
