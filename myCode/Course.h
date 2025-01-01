@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <stdexcept>
 
 class Course
 {
@@ -22,7 +23,7 @@ public:
 
 	unsigned int getCourseKey() const;
 	float getCreditPoints() const;
-	unsigned char getMajor() const;
+	const std::string& getMajor() const;
 	const std::string& getTitle() const;
 
 };
