@@ -17,7 +17,7 @@ private:
 
 public:
 
-	Course(unsigned int courseKey, std::string title, unsigned char major, float creditPoints);
+	Course(unsigned int courseKey, std::string title, std::string major, float creditPoints);
 	virtual ~Course() = 0;
 
 	unsigned int getCourseKey() const;
