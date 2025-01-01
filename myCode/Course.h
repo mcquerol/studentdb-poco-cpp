@@ -1,5 +1,5 @@
 #ifndef COURSE_H
-#ifndef COURSE_H
+#define COURSE_H
 
 #include <map>
 #include <string>
@@ -28,4 +28,4 @@ public:
 };
 
 
-#endif COURSE_H
+#endif

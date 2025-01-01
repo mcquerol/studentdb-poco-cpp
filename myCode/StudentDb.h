@@ -25,4 +25,4 @@ public:
 
 };
 
-#endif STUDENTDB_H
+#endif

@@ -31,4 +31,4 @@ public:
 	unsigned int getMatrikelNumber() const;
 };
 
-#endif STUDENT_H
+#endif

@@ -23,4 +23,4 @@ public:
 	const Poco::Data::Time& getStartTime() const;
 };
 
-#endif WEEKLYCOURSE_H
+#endif

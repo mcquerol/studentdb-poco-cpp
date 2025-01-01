@@ -27,4 +27,4 @@ public:
 
 };
 
-#ifndef BLOCKCOURSE_H
+#endif

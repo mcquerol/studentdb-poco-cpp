@@ -19,4 +19,4 @@ public:
 };
 
 
-#endif SIMPLEUI_H
+#endif
