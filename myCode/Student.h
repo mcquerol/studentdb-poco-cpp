@@ -12,7 +12,7 @@ class Student
 
 private:
 
-	static unsigned int nextMatikelNumber = 100000;
+	static unsigned int nextMatikelNumber;
 	unsigned int matrikelNumber;
 	std::string firstName;
 	std::string lastName;
