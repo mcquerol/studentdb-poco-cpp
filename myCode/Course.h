@@ -9,7 +9,7 @@ class Course
 
 private:
 
-	static unsigned std::map<unsigned char, std::string> majorById;
+	static std::map<unsigned char, std::string> majorById;
 	unsigned int courseKey;
 	std::string title;
 	unsigned char major;
