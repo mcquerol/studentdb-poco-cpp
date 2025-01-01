@@ -1,8 +1,11 @@
 #include "Student.h"
 
+unsigned int Student::nextMatrikelNumber = 100000;
+
+
 Student::Student(unsigned int matrikelNumber, std::string firstName, std::string lastName, Poco::Data::Date dateOfBirth, std::vector<Enrollment> enrollments)
 {
-	this->matrikelNumber = matrikelNumber;
+	this->matrikelNumber = Student::nextMatrikelNumber++;
 	this->firstName = firstName;
 	this->lastName = lastName;
 	this->dateOfBirth = dateOfBirth;
