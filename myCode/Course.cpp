@@ -1,5 +1,13 @@
 #include "Course.h"
 
+std::map<unsigned char, std::string> Course::majorById =
+{
+	{'A', "Automation"},
+	{'C', "Communications"},
+	{'E', "Embedded"},
+	{'P', "Power"},
+};
+
 Course::Course(unsigned int courseKey, std::string title, unsigned char major, float creditPoints)
 {
 	this->courseKey = courseKey;
@@ -20,7 +28,7 @@ float Course::getCreditPoints() const
 
 unsigned char Course::getMajor() const
 {
-	return major;
+	return majorById[major];
 }
 
 const std::string& Course::getTitle() const
