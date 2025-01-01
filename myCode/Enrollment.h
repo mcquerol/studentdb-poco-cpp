@@ -16,6 +16,12 @@ private:
 
 public:
 
+	Enrollment(float grade, std::string semester, Course* course);
+	~Enrollment();
+
+	float getGrade() const;
+	const std::string& getSemester() const;
+	const Course*& getCourse() const;
 
 };
 

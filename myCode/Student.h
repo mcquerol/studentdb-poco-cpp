@@ -21,7 +21,14 @@ private:
 
 public:
 
+	Student(std::string firstName, std::string lastName, Poco::Data::Date dateofBirth, std::vector<Enrollment> enrollments);
+	~Student();
 
+	const Poco::Data::Date& getDateofBirth() const;
+	const std::vector<Enrollment>& getEnrollments() const;
+	const std::string& getFirstName() const;
+	const std::string& getLastName() const;
+	unsigned int getMatrikelNumber() const;
 };
 
 #endif STUDENT_H

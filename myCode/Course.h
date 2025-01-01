@@ -2,7 +2,6 @@
 #ifndef COURSE_H
 
 #include <map>
-
 #include <string>
 
 class Course
@@ -18,7 +17,13 @@ private:
 
 public:
 
+	Course(unsigned int courseKey, std::string title, unsigned char major, float creditPoints);
 	virtual ~Course() = 0;
+
+	unsigned int getCourseKey() const;
+	float getCreditPoints() const;
+	unsigned char getMajor() const;
+	const std::string& getTitle() const;
 
 };
 

@@ -17,8 +17,19 @@ private:
 
 public:
 
+	BlockCourse(Poco::Data::Date startDate, Poco::Data::Date endDate, Poco::Data::Time startTime, Poco::Data::Time endTime);
+	~BlockCourse();
+
+	void setStartTime(const Poco::Data::Time &startTime);
+	void setEndTime(const Poco::Data::Time &endTime);
+	void setStartDate(const Poco::Data::Date &startDate);
+	void setEndDate(const Poco::Data::Date &endDate);
+
+	const Poco::Data::Time& getStartTime() const;
+	const Poco::Data::Time& getEndTime() const;
+	const Poco::Data::Date& getStartDate() const;
+	const Poco::Data::Date& getEndDate() const;
 
 };
-
 
 #ifndef BLOCKCOURSE_H
