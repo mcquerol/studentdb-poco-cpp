@@ -21,7 +21,7 @@ public:
 
 	float getGrade() const;
 	const std::string& getSemester() const;
-	const Course*& getCourse() const;
+	const Course& getCourse() const;
 
 };
 
