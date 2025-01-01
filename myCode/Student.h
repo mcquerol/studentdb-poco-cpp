@@ -2,8 +2,8 @@
 #define STUDENT_H
 
 #include <string>
-#include <Poco/Data/Date.h>
 #include <vector>
+#include <Poco/Data/Date.h>
 
 #include "Enrollment.h"
 
@@ -12,7 +12,7 @@ class Student
 
 private:
 
-	static unsigned int nextMatikelNumber;
+	static unsigned int nextMatrikelNumber;
 	unsigned int matrikelNumber;
 	std::string firstName;
 	std::string lastName;
