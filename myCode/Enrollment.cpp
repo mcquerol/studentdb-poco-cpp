@@ -22,7 +22,7 @@ const std::string& Enrollment::getSemester() const
 	return semester;
 }
 
-const Course*& Enrollment::getCourse() const
+const Course& Enrollment::getCourse() const
 {
-	return course;
+	return *course;
 }
