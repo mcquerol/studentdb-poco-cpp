@@ -22,6 +22,7 @@ public:
 
 	const std::map<int, std::unique_ptr<const Course> >& getCourses() const;
 	const std::map<int, Student>& getStudents() const;
+
 };
 
 #endif STUDENTDB_H
