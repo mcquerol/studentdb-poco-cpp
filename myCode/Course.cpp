@@ -16,8 +16,10 @@ Course::Course(unsigned int courseKey, std::string title, std::string major, flo
 	this->creditPoints = creditPoints;
 
     // Find the char representation for the provided string
-    for (const auto& pair : majorById) {
-        if (pair.second == major) {
+    for (const auto& pair : majorById)
+    {
+        if (pair.second == major)
+        {
             this->major = pair.first; // Store the char internally
             return;
         }
@@ -39,7 +41,8 @@ float Course::getCreditPoints() const
 const std::string& Course::getMajor() const
 {
     auto it = majorById.find(major);
-    if (it != majorById.end()) {
+    if (it != majorById.end())
+    {
         return it->second; // Return the string representation
     }
     throw std::runtime_error("Major not found in mapping");
