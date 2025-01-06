@@ -8,7 +8,7 @@ class SimpleUI
 
 private:
 
-
+	StudentDb db;
 
 public:
 
