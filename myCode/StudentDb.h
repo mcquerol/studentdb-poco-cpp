@@ -20,9 +20,11 @@ public:
 	StudentDb();
 	~StudentDb();
 
-	const std::map<int, std::unique_ptr<const Course> >& getCourses() const;
+	const std::map<int, std::unique_ptr<const Course>>& getCourses() const;
 	const std::map<int, Student>& getStudents() const;
 
+	void setCourse(Course* course);
+	void setStudent(Student student);
 };
 
 #endif
