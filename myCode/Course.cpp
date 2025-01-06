@@ -28,6 +28,11 @@ Course::Course(unsigned int courseKey, std::string title, std::string major, flo
 
 }
 
+Course::~Course()
+{
+
+}
+
 unsigned int Course::getCourseKey() const
 {
 	return courseKey;
