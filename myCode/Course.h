@@ -8,7 +8,7 @@
 class Course
 {
 
-private:
+protected:
 
 	static std::map<unsigned char, std::string> majorById;
 	unsigned int courseKey;
@@ -26,6 +26,7 @@ public:
 	const std::string& getMajor() const;
 	const std::string& getTitle() const;
 
+	
 };
 
 
