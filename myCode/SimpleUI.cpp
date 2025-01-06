@@ -23,7 +23,7 @@ void SimpleUI::run()
 	cout << "7. Update student" << endl;
 	cout << "or type 0 to terminate" << endl;
 
-	cin << choice;
+	cin >> choice;
 
 	switch(choice)
 	{
