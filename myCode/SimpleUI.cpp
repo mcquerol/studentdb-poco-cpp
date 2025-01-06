@@ -5,6 +5,7 @@ using namespace std;
 
 SimpleUI::SimpleUI(StudentDb &db)
 {
+	this->db = db;
 }
 
 void SimpleUI::run()
