@@ -18,3 +18,11 @@ const std::map<int, Student>& StudentDb::getStudents() const
 {
 	return students;
 }
+
+void StudentDb::setCourse(Course *course)
+{
+}
+
+void StudentDb::setStudent(Student student)
+{
+}
