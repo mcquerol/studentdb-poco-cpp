@@ -1,12 +1,7 @@
 #include "BlockCourse.h"
 
-BlockCourse::BlockCourse(Poco::Data::Date startDate, Poco::Data::Date endDate, Poco::Data::Time startTime, Poco::Data::Time endTime)
-{
-	this->startDate = startDate;
-	this->endDate = endDate;
-	this->startTime = startTime;
-	this->endTime = endTime;
-}
+BlockCourse::BlockCourse(unsigned int courseKey, std::string title, std::string major, float creditPoints)
+: Course(courseKey,title,major,creditPoints) {}
 
 BlockCourse::~BlockCourse()
 {
@@ -30,4 +25,24 @@ const Poco::Data::Date& BlockCourse::getStartDate() const
 const Poco::Data::Date& BlockCourse::getEndDate() const
 {
 	return endDate;
+}
+
+void BlockCourse::setStartTime(const Poco::Data::Time &startTime)
+{
+	this->startTime = startTime;
+}
+
+void BlockCourse::setEndTime(const Poco::Data::Time &endTime)
+{
+	this->endTime = endTime;
+}
+
+void BlockCourse::setStartDate(const Poco::Data::Date &startDate)
+{
+	this->startDate = startDate;
+}
+
+void BlockCourse::setEndDate(const Poco::Data::Date &endDate)
+{
+	this->endDate = endDate;
 }
