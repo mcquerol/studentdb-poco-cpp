@@ -2,7 +2,14 @@
 
 
 WeeklyCourse::WeeklyCourse(unsigned int courseKey, std::string title, std::string major, float creditPoints)
-: Course(courseKey,title,major,creditPoints) {}
+: Course(courseKey,title,major,creditPoints)
+{
+
+	this->dayOfWeek = Poco::DateTime::DaysOfWeek::SUNDAY; // default day is sunday
+	this->startTime = -1; // default startTime
+	this->endTime = -1; // default endTime
+
+}
 
 WeeklyCourse::~WeeklyCourse()
 {
