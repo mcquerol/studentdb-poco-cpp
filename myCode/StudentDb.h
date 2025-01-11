@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "Student.h"
-#include "Course.h"
+
 
 class StudentDb
 {
@@ -23,7 +23,7 @@ public:
 	const std::map<int, std::unique_ptr<const Course>>& getCourses() const;
 	const std::map<int, Student>& getStudents() const;
 
-	void setCourse(Course* course);
+	void setCourse(std::unique_ptr<Course> course);
 	void setStudent(Student student);
 };
 
