@@ -64,18 +64,23 @@ void SimpleUI::addNewCourse()
 	cout << "1. Add new course" << endl;
 	cout << "-------------------------" << endl;
 	cout << "Enter W for Weeklycourse or B for Blockcourse" << endl;
+
 	char courseChoice;
 	cin >> courseChoice;
-
 
 	unsigned int courseKey;
 	string title;
 	string major;
 	float creditPoints;
-	int dayOfWeek;
+
 	int startHour, startMinute, startSecond;
 	int endHour, endMinute, endSecond;
+	int startYear, startMonth, startDay;
+	int endYear, endMonth, endDay;
 
+	int dayOfWeek;
+
+	/* Course class parameters */
 	cout << "Enter Course key: ";
 	cin >> courseKey;
 	cout << "Enter Module title: ";
@@ -84,8 +89,7 @@ void SimpleUI::addNewCourse()
 	cin >> major;
 	cout << "Enter Credit points: ";
 	cin >> creditPoints;
-	cout << "Enter day of the week (0-6): ";
-	cin >> dayOfWeek;
+
 	cout << "Enter start time (h m s): ";
 	cin >> startHour >> startMinute >> startSecond;
 	cout << "Enter end time (h m s): ";
@@ -94,25 +98,40 @@ void SimpleUI::addNewCourse()
 	Poco::Data::Time startTime = {startHour, startMinute, startSecond};
 	Poco::Data::Time endTime = {endHour, endMinute, endSecond};
 
-	Poco::Data::Date startDate = {startYear, startMonth, startDay};
-	Poco::Data::Date endDate = {endYear, endMonth, endDay};
-
 
 	if(courseChoice == 'B')
 	{
-		std::unique_ptr<BlockCourse> blockCourse = std::make_unique<BlockCourse>(courseKey, "", major, creditPoints);
+		cout << "Enter start date (Y M D): ";
+		cin >> startYear >> startMonth >> startDay;
+		cout << "Enter end date (Y M D): ";
+		cin >> endYear >> endMonth >> endDay;
+
+		Poco::Data::Date startDate = {startYear, startMonth, startDay};
+		Poco::Data::Date endDate = {endYear, endMonth, endDay};
+
+		std::unique_ptr<BlockCourse> blockCourse = std::make_unique<BlockCourse>(courseKey, title, major, creditPoints);
+
+		blockCourse->setStartDate(startDate);
+		blockCourse->setEndDate(endDate);
 		blockCourse->setStartTime(startTime);
-		blockCourse->setEndTime({endHour, endMinute, endSecond});
-		blockCourse->setStartDate({startDate})
+		blockCourse->setEndTime(endTime);
+
 		db->setCourse(std::move(blockCourse));
+		cout << "Block course added" << endl;
 	}
 	else if(courseChoice == 'W')
 	{
-		std::unique_ptr<WeeklyCourse> weeklyCourse = std::make_unique<WeeklyCourse>(courseKey, "", major, creditPoints);
+		cout << "Enter day of the week (0-6): ";
+		cin >> dayOfWeek;
+
+		std::unique_ptr<WeeklyCourse> weeklyCourse = std::make_unique<WeeklyCourse>(courseKey, title, major, creditPoints);
+
 		weeklyCourse->setDayOfWeek((Poco::DateTime::DaysOfWeek)dayOfWeek);
-		weeklyCourse->setStartTime({startHour, startMinute, startSecond});
-		weeklyCourse->setEndTime({endHour, endMinute, endSecond});
+		weeklyCourse->setStartTime(startTime);
+		weeklyCourse->setEndTime(endTime);
+
 		db->setCourse(std::move(weeklyCourse));
+		cout << "Weekly course added" << endl;
 	}
 
 }
