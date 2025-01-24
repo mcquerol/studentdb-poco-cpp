@@ -138,6 +138,35 @@ void SimpleUI::addNewCourse()
 
 void SimpleUI::listCourses()
 {
+	for(const auto& [key, coursePtr] : db->getCourses())
+	{
+		//data from base class
+		cout << "Course key: " << key << endl; // use the first iterator instead of having to use .second
+		cout << "Course Title: " << coursePtr->getTitle() << endl;
+		cout << "Course Major: " << coursePtr->getMajor() << endl;
+		cout << "Course Credit Points: " << coursePtr->getCreditPoints() << endl;
+
+		auto* blockCourse = dynamic_cast<BlockCourse*>(coursePtr.get());
+		auto* weeklyCourse = dynamic_cast<WeeklyCourse*>(coursePtr.get());
+
+		if(blockCourse)
+		{
+			cout << "Start Date: " << blockCourse->getStartDate().day() << "." << blockCourse->getStartDate().month() << "." << blockCourse->getStartDate().year() << endl;
+			cout << "End Date: " << blockCourse->getEndDate().day() << "." << blockCourse->getEndDate().month() << "." << blockCourse->getEndDate().year() << endl;
+			cout << "Start Time: " << blockCourse->getStartTime().second() << "." << blockCourse->getStartTime().minute() << "." << blockCourse->getStartTime().hour() << endl;
+			cout << "End Time: " << blockCourse->getEndTime().second() << "." << blockCourse->getEndTime().minute() << "." << blockCourse->getEndTime().hour() << endl;
+		}
+		else if(weeklyCourse)
+		{
+			cout << "Day of the week: " << weeklyCourse->getDayOfWeek() << endl;
+			cout << "Start Time: " << weeklyCourse->getStartTime().second() << "." << weeklyCourse->getStartTime().minute() << "." << weeklyCourse->getStartTime().hour() << endl;
+			cout << "End Time: " << weeklyCourse->getEndTime().second() << "." << weeklyCourse->getEndTime().minute() << "." << weeklyCourse->getEndTime().hour() << endl;
+		}
+		else
+		{
+			continue;
+		}
+	}
 }
 
 void SimpleUI::addNewStudent()
