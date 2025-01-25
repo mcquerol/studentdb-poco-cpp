@@ -22,7 +22,7 @@ private:
 
 public:
 
-	Student(std::string firstName, std::string lastName, Poco::Data::Date dateOfBirth);
+	Student(std::string firstName, std::string lastName, Poco::Data::Date dateOfBirth, std::string street, unsigned short postalCode, std::string cityName, std::string additionalInfo);
 	~Student();
 
 	Address address;
