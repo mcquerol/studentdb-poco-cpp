@@ -25,7 +25,7 @@ public:
 	Student(std::string firstName, std::string lastName, Poco::Data::Date dateOfBirth);
 	~Student();
 
-	Address adress;
+	Address address;
 
 	const Poco::Data::Date& getDateOfBirth() const;
 	const std::string& getFirstName() const;
