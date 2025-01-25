@@ -3,7 +3,7 @@
 unsigned int Student::nextMatrikelNumber = 100000;
 
 
-Student::Student(unsigned int matrikelNumber, std::string firstName, std::string lastName, Poco::Data::Date dateOfBirth, std::vector<Enrollment> enrollments)
+Student::Student(unsigned int matrikelNumber, std::string firstName, std::string lastName, Poco::Data::Date dateOfBirth)
 {
 	this->matrikelNumber = Student::nextMatrikelNumber++;
 	this->firstName = firstName;
@@ -21,10 +21,6 @@ const Poco::Data::Date& Student::getDateOfBirth() const
 	return dateOfBirth;
 }
 
-const std::vector<Enrollment>& Student::getEnrollments() const
-{
-	return enrollments;
-}
 
 const std::string& Student::getFirstName() const
 {
@@ -39,4 +35,9 @@ const std::string& Student::getLastName() const
 unsigned int Student::getMatrikelNumber() const
 {
 	return matrikelNumber;
+}
+
+const std::vector<Enrollment>& Student::getEnrollments() const
+{
+	return enrollments;
 }
