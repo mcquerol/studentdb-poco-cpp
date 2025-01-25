@@ -9,7 +9,6 @@ Student::Student(unsigned int matrikelNumber, std::string firstName, std::string
 	this->firstName = firstName;
 	this->lastName = lastName;
 	this->dateOfBirth = dateOfBirth;
-	this->enrollments = enrollments;
 }
 
 Student::~Student()
