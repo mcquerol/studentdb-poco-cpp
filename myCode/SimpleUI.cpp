@@ -2,6 +2,7 @@
 #include "Course.h"
 #include "WeeklyCourse.h"
 #include "BlockCourse.h"
+#include "Student.h"
 
 #include <iostream>
 
@@ -171,6 +172,33 @@ void SimpleUI::listCourses()
 
 void SimpleUI::addNewStudent()
 {
+	string firstName;
+	string lastName;
+	int year, month, day;
+	Poco::Data::Date dateOfBirth(year, month, day);
+
+	string street;
+	unsigned short postalCode;
+	string cityName;
+	string additionalInfo;
+
+	cout << "Enter first name: " << endl;
+	cin >> firstName;
+	cout << "Enter last name: " << endl;
+	cin >> lastName;
+	cout << "Enter date of birth (Y M D): " << endl;
+	cin >> year >> month >> day;
+	cout << "Enter street" << endl;
+	cin >> street;
+	cout << "Enter postal code" << endl;
+	cin >> postalCode;
+	cout << "Enter City name: " << endl;
+	cin >> cityName;
+	cout << "Enter any additional info: " << endl;
+	cin >> additionalInfo;
+
+	Student student(firstName, lastName, dateOfBirth, street, postalCode, cityName, additionalInfo);
+	db->setStudent(student);
 }
 
 void SimpleUI::addEnrollment()
