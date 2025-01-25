@@ -3,7 +3,7 @@
 unsigned int Student::nextMatrikelNumber = 100000;
 
 
-Student::Student(unsigned int matrikelNumber, std::string firstName, std::string lastName, Poco::Data::Date dateOfBirth)
+Student::Student(std::string firstName, std::string lastName, Poco::Data::Date dateOfBirth)
 {
 	this->matrikelNumber = Student::nextMatrikelNumber++;
 	this->firstName = firstName;
