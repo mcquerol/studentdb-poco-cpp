@@ -17,6 +17,11 @@ float Enrollment::getGrade() const
 	return grade;
 }
 
+void Enrollment::setGrade(float grade)
+{
+	this->grade = grade;
+}
+
 const std::string& Enrollment::getSemester() const
 {
 	return semester;
