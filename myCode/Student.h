@@ -33,6 +33,7 @@ public:
 	unsigned int getMatrikelNumber() const;
 
 	const std::vector<Enrollment>& getEnrollments() const;
+	void setEnrollment(float grade, std::string semester, Course *course);
 };
 
 #endif
