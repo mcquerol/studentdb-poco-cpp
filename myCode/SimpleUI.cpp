@@ -139,16 +139,16 @@ void SimpleUI::addNewCourse()
 
 void SimpleUI::listCourses()
 {
-	for(const auto& [key, coursePtr] : db->getCourses())
+	for(const auto& coursePtr : db->getCourses())
 	{
 		//data from base class
-		cout << "Course key: " << key << endl; // use the first iterator instead of having to use .second
-		cout << "Course Title: " << coursePtr->getTitle() << endl;
-		cout << "Course Major: " << coursePtr->getMajor() << endl;
-		cout << "Course Credit Points: " << coursePtr->getCreditPoints() << endl;
+		cout << "Course key: " << coursePtr.first << endl; // use the first iterator instead of having to use .second
+		cout << "Course Title: " << coursePtr.second->getTitle() << endl;
+		cout << "Course Major: " << coursePtr.second->getMajor() << endl;
+		cout << "Course Credit Points: " << coursePtr.second->getCreditPoints() << endl;
 
-		auto* blockCourse = dynamic_cast<BlockCourse*>(coursePtr.get());
-		auto* weeklyCourse = dynamic_cast<WeeklyCourse*>(coursePtr.get());
+		auto* blockCourse = dynamic_cast<BlockCourse*>(const_cast<Course*>(coursePtr.second.get()));
+		auto* weeklyCourse = dynamic_cast<WeeklyCourse*>(const_cast<Course*>(coursePtr.second.get()));
 
 		if(blockCourse)
 		{
@@ -203,6 +203,45 @@ void SimpleUI::addNewStudent()
 
 void SimpleUI::addEnrollment()
 {
+	unsigned int matrikelNumber;
+	float grade;
+	string semester;
+	unsigned int courseKey;
+
+	cout << "Enter matrikel number: " << endl;
+	cin >> matrikelNumber;
+	cout << "Enter grade: " << endl;
+	cin >> grade;
+	cout << "Enter semester: " << endl;
+	cin >> semester;
+	cout << "Enter course key: " << endl;
+	cin >> courseKey;
+
+	//access the enrollments but might need to create a setter for the enrollments vector
+	//check if the enrollment exists when trying to make it..so yea will need a settter
+	//add the course to the enrollment vector that is associated with the coursekey that is provided here
+
+	if (db->getStudents().find(matrikelNumber) != db->getStudents().end())
+	{
+	    // Access the course associated with the courseKey
+	    auto it = db->getCourses().find(courseKey);
+
+	    if (it != db->getCourses().end())
+	    {
+	    	// Get the raw Course pointer
+	    	Course* course = const_cast<Course*>(it->second.get());
+	        // Call setEnrollment on the Student object
+	        db->getStudents().at(matrikelNumber).setEnrollment(grade, semester, course);
+	    }
+	    else
+	    {
+	        cerr << "Course with key " << courseKey << " not found!" << endl;
+	    }
+	}
+	else
+	{
+	    cerr << "Student with matrikel number " << matrikelNumber << " not found!" << endl;
+	}
 }
 
 void SimpleUI::printStudent()
