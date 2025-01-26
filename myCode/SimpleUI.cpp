@@ -64,6 +64,8 @@ void SimpleUI::addNewCourse()
 	cout << "-------------------------" << endl;
 	cout << "1. Add new course" << endl;
 	cout << "-------------------------" << endl;
+	cout << endl;
+
 	cout << "Enter W for Weeklycourse or B for Blockcourse" << endl;
 
 	char courseChoice;
@@ -139,6 +141,11 @@ void SimpleUI::addNewCourse()
 
 void SimpleUI::listCourses()
 {
+	cout << "-------------------------" << endl;
+	cout << "2. List courses" << endl;
+	cout << "-------------------------" << endl;
+	cout << endl;
+
 	for(const auto& coursePtr : db->getCourses())
 	{
 		//data from base class
@@ -182,6 +189,11 @@ void SimpleUI::addNewStudent()
 	string cityName;
 	string additionalInfo;
 
+	cout << "-------------------------" << endl;
+	cout << "3. Add new student" << endl;
+	cout << "-------------------------" << endl;
+	cout << endl;
+
 	cout << "Enter first name: " << endl;
 	cin >> firstName;
 	cout << "Enter last name: " << endl;
@@ -207,6 +219,11 @@ void SimpleUI::addEnrollment()
 	float grade;
 	string semester;
 	unsigned int courseKey;
+
+	cout << "-------------------------" << endl;
+	cout << "4. Add enrollment" << endl;
+	cout << "-------------------------" << endl;
+	cout << endl;
 
 	cout << "Enter matrikel number: " << endl;
 	cin >> matrikelNumber;
@@ -248,6 +265,11 @@ void SimpleUI::printStudent()
 {
 
 	unsigned int matrikelNumber;
+
+	cout << "-------------------------" << endl;
+	cout << "5. Print Student" << endl;
+	cout << "-------------------------" << endl;
+	cout << endl;
 
 	cout << "Enter matrikel number: " << endl;
 	cin >> matrikelNumber;
@@ -301,6 +323,11 @@ void SimpleUI::searchStudent()
 {
 	std::string stringToSearch;
 
+	cout << "-------------------------" << endl;
+	cout << "6. Search student" << endl;
+	cout << "-------------------------" << endl;
+	cout << endl;
+
 	cout << "Enter a string to search for a student: " << endl;
 	cin >> stringToSearch;
 
@@ -318,4 +345,8 @@ void SimpleUI::searchStudent()
 
 void SimpleUI::updateStudent()
 {
+	cout << "-------------------------" << endl;
+	cout << "7. Update student" << endl;
+	cout << "-------------------------" << endl;
+	cout << endl;
 }
