@@ -18,6 +18,11 @@ const std::map<int, Student>& StudentDb::getStudents() const
 	return students;
 }
 
+std::map<int, Student>& StudentDb::getStudents()
+{
+	return students;
+}
+
 void StudentDb::setCourse(std::unique_ptr<Course> course)
 {
     // Move the unique pointer into the courses map using the course id as the key
