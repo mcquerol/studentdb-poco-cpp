@@ -246,6 +246,55 @@ void SimpleUI::addEnrollment()
 
 void SimpleUI::printStudent()
 {
+
+	unsigned int matrikelNumber;
+
+	cout << "Enter matrikel number: " << endl;
+	cin >> matrikelNumber;
+
+    cout << "Info for: " << matrikelNumber << endl;
+    cout << "-------------------------" << endl;
+
+	if (db->getStudents().find(matrikelNumber) != db->getStudents().end())
+	{
+	    auto it = db->getStudents().find(matrikelNumber);
+
+	    cout << "Info for: " << matrikelNumber << endl;
+	    cout << "-------------------------" << endl;
+
+		cout << "\tfirst name: "<< it->second.getFirstName() << endl;
+		cout << "\tlast name: "<< it->second.getLastName() << endl;
+		cout << "\tdate of birth: "<< it->second.getDateOfBirth().day() << "." << it->second.getDateOfBirth().month() << "." << it->second.getDateOfBirth().year() << endl;
+		cout << "\tstreet: "<< it->second.address.getStreet() << endl;
+		cout << "\tpostal code: "<< it->second.address.getPostalCode() << endl;
+		cout << "\tadditional info" << it->second.address.getAdditionalInfo() << endl;
+
+		cout << endl;
+
+		cout << "Enrollment info" << endl;
+
+		for(const auto& enrollment : it->second.getEnrollments())
+		{
+			cout << "\tSemester: " << enrollment.getSemester() << endl;
+			cout << "\tGrade: " << enrollment.getGrade() << endl;
+			if (enrollment.getCourse())
+			{
+				cout << "Course info for: " << enrollment.getCourse().getCourseKey() << endl;
+				cout << "\tTitle: " << enrollment.getCourse().getTitle() << endl;
+				cout << "\tMajor: " << enrollment.getCourse().getMajor() << endl;
+				cout << "\tCreditPoints: " << enrollment.getCourse().getCreditPoints() << endl;
+			}
+			else
+			{
+			    cout << "\tNo course information available for this enrollment." << endl;
+			}
+
+		}
+	}
+	else
+	{
+	    cerr << "Student with matrikel number " << matrikelNumber << " not found!" << endl;
+	}
 }
 
 void SimpleUI::searchStudent()
