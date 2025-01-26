@@ -213,6 +213,7 @@ void SimpleUI::addNewStudent()
 	db->setStudent(student);
 }
 
+//TODO check if enrollment alreadyd exists using find_if
 void SimpleUI::addEnrollment()
 {
 	unsigned int matrikelNumber;
@@ -281,14 +282,12 @@ void SimpleUI::printStudent()
 	{
 	    auto it = db->getStudents().find(matrikelNumber);
 
-	    cout << "Info for: " << matrikelNumber << endl;
-	    cout << "-------------------------" << endl;
-
 		cout << "\tfirst name: "<< it->second.getFirstName() << endl;
 		cout << "\tlast name: "<< it->second.getLastName() << endl;
 		cout << "\tdate of birth: "<< it->second.getDateOfBirth().day() << "." << it->second.getDateOfBirth().month() << "." << it->second.getDateOfBirth().year() << endl;
 		cout << "\tstreet: "<< it->second.address.getStreet() << endl;
 		cout << "\tpostal code: "<< it->second.address.getPostalCode() << endl;
+		cout << "\tcity name: " << it->second.address.getCityName() << endl;
 		cout << "\tadditional info" << it->second.address.getAdditionalInfo() << endl;
 
 		cout << endl;
@@ -299,18 +298,10 @@ void SimpleUI::printStudent()
 		{
 			cout << "\tSemester: " << enrollment.getSemester() << endl;
 			cout << "\tGrade: " << enrollment.getGrade() << endl;
-			if (enrollment.getCourse())
-			{
-				cout << "Course info for: " << enrollment.getCourse().getCourseKey() << endl;
-				cout << "\tTitle: " << enrollment.getCourse().getTitle() << endl;
-				cout << "\tMajor: " << enrollment.getCourse().getMajor() << endl;
-				cout << "\tCreditPoints: " << enrollment.getCourse().getCreditPoints() << endl;
-			}
-			else
-			{
-			    cerr << "\tNo course information available for this enrollment." << endl;
-			}
-
+			cout << "Course info for: " << enrollment.getCourse().getCourseKey() << endl;
+			cout << "\tTitle: " << enrollment.getCourse().getTitle() << endl;
+			cout << "\tMajor: " << enrollment.getCourse().getMajor() << endl;
+			cout << "\tCreditPoints: " << enrollment.getCourse().getCreditPoints() << endl;
 		}
 	}
 	else
@@ -343,10 +334,119 @@ void SimpleUI::searchStudent()
 	}
 }
 
+/*TODO change the add and remove enrollment methods
+ *
+ * Use references where necessary to avoid unnecessary copies.
+ * Break down repetitive logic into helper functions for readability.
+ * Add validation for user inputs to prevent runtime errors or bad data.
+ *
+ */
 void SimpleUI::updateStudent()
 {
+	unsigned int matrikelNumber;
+	int choice;
+
+	string firstName;
+	string lastName;
+	int year, month, day;
+	Poco::Data::Date dateOfBirth(year, month, day);
+
+	string street;
+	unsigned short postalCode;
+	string cityName;
+	string additionalInfo;
+
+	float grade;
+
 	cout << "-------------------------" << endl;
 	cout << "7. Update student" << endl;
 	cout << "-------------------------" << endl;
 	cout << endl;
+
+	cout << "Enter matrikel number: " << endl;
+	cin >> matrikelNumber;
+
+	if (db->getStudents().find(matrikelNumber) != db->getStudents().end())
+	{
+		cout << "What would you like to update?: " << endl;
+		cout << "-------------------------" << endl;
+		cout << "1. First name" << endl;
+		cout << "2. Last name" << endl;
+		cout << "3. Date of birth" << endl;
+		cout << "4. Address" << endl;
+		cout << "0. Exit" << endl;
+		cout << "Enter your choice (1-4 or 0)" << endl;
+
+		auto& enrollments = db->getStudents().at(matrikelNumber).getEnrollments();
+		for (size_t i = 0; i < enrollments.size(); i++)
+		{
+		    const auto& enrollment = enrollments[i];
+		    cout << (i + 5) << ". [Enrollment #" << (i + 1) << " Semester: " << enrollment.getSemester() << ", Grade: " << enrollment.getGrade() << "]" <<endl;
+		}
+
+		cin >> choice;
+		switch(choice)
+		{
+		case 1:
+			cout << "Enter first name: " << endl;
+			cin >> firstName;
+			db->getStudents().at(matrikelNumber).setFirstName(firstName);
+		break;
+		case 2:
+			cout << "Enter last name: " << endl;
+			cin >> lastName;
+			db->getStudents().at(matrikelNumber).setLastName(lastName);
+		break;
+		case 3:
+			cout << "Enter date of birth (Y M D): " << endl;
+			cin >> year >> month >> day;
+			db->getStudents().at(matrikelNumber).setDateOfBirth(dateOfBirth);
+		break;
+		case 4:
+			cout << "Enter street: " << endl;
+			cin >> street;
+			cout << "Enter postal code:" << endl;
+			cin >> postalCode;
+			cout << "Enter City name: " << endl;
+			cin >> cityName;
+			cout << "Enter any additional info: " << endl;
+			cin >> additionalInfo;
+			db->getStudents().at(matrikelNumber).setAddress(Address(street, postalCode, cityName, additionalInfo));
+		break;
+		case 0:
+			return;
+		break;
+		default:
+			size_t enrollmentIndex = choice - 5; // Calculate index for vector
+			if (enrollmentIndex < enrollments.size())
+			{
+				auto& selectedEnrollment = enrollments[enrollmentIndex];
+
+				cout << "What would you like to do with the enrollment?" << endl;
+				cout << "1. Remove enrollment" << endl;
+				cout << "2. Add grade" << endl;
+				cin >> choice;
+
+				if(choice == 1)
+				{
+					db->getStudents().find(matrikelNumber)->second.removeEnrollment(enrollmentIndex);
+				}
+				else if (choice == 2)
+				{
+					cout << "Enter grade: " << endl;
+					cin >> grade;
+					selectedEnrollment.setGrade(grade);
+				}
+			}
+			else
+			{
+				cerr << "Invalid choice! Please select a valid enrollment." << endl;
+			}
+		break;
+		}
+	}
+	else
+	{
+		cerr << "Student with matrikel number " << matrikelNumber << " not found!" << endl;
+	}
 }
