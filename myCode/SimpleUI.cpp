@@ -286,7 +286,7 @@ void SimpleUI::printStudent()
 			}
 			else
 			{
-			    cout << "\tNo course information available for this enrollment." << endl;
+			    cerr << "\tNo course information available for this enrollment." << endl;
 			}
 
 		}
@@ -299,6 +299,21 @@ void SimpleUI::printStudent()
 
 void SimpleUI::searchStudent()
 {
+	std::string stringToSearch;
+
+	cout << "Enter a string to search for a student: " << endl;
+	cin >> stringToSearch;
+
+	for(const auto& students : db->getStudents())
+	{
+		if(students.second.getFirstName().find(stringToSearch) != string::npos || students.second.getLastName().find(stringToSearch) != string::npos)
+		{
+			cout << "Matrikel Number: " << students.second.getMatrikelNumber() << endl;
+			cout << "\tfirst name: "<< students.second.getFirstName() << endl;
+			cout << "\tlast name: "<< students.second.getLastName() << endl;
+			cout << endl;
+		}
+	}
 }
 
 void SimpleUI::updateStudent()
