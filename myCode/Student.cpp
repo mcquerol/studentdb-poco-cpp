@@ -41,3 +41,8 @@ const std::vector<Enrollment>& Student::getEnrollments() const
 {
 	return enrollments;
 }
+
+void Student::setEnrollment(float grade, std::string semester, Course *course)
+{
+	enrollments.emplace_back(grade, semester, course);
+}
