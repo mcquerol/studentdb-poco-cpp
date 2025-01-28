@@ -163,19 +163,20 @@ void SimpleUI::listCourses()
 		{
 			cout << "Start Date: " << blockCourse->getStartDate().day() << "." << blockCourse->getStartDate().month() << "." << blockCourse->getStartDate().year() << endl;
 			cout << "End Date: " << blockCourse->getEndDate().day() << "." << blockCourse->getEndDate().month() << "." << blockCourse->getEndDate().year() << endl;
-			cout << "Start Time: " << blockCourse->getStartTime().second() << "." << blockCourse->getStartTime().minute() << "." << blockCourse->getStartTime().hour() << endl;
-			cout << "End Time: " << blockCourse->getEndTime().second() << "." << blockCourse->getEndTime().minute() << "." << blockCourse->getEndTime().hour() << endl;
+			cout << "Start Time: " << blockCourse->getStartTime().hour() << "." << blockCourse->getStartTime().minute() << "." << blockCourse->getStartTime().second() << endl;
+			cout << "End Time: " << blockCourse->getEndTime().hour() << "." << blockCourse->getEndTime().minute() << "." << blockCourse->getEndTime().second() << endl;
 		}
 		else if(weeklyCourse)
 		{
 			cout << "Day of the week: " << weeklyCourse->getDayOfWeek() << endl;
-			cout << "Start Time: " << weeklyCourse->getStartTime().second() << "." << weeklyCourse->getStartTime().minute() << "." << weeklyCourse->getStartTime().hour() << endl;
-			cout << "End Time: " << weeklyCourse->getEndTime().second() << "." << weeklyCourse->getEndTime().minute() << "." << weeklyCourse->getEndTime().hour() << endl;
+			cout << "Start Time: " << weeklyCourse->getStartTime().hour() << "." << weeklyCourse->getStartTime().minute() << "." << weeklyCourse->getStartTime().second() << endl;
+			cout << "End Time: " << weeklyCourse->getEndTime().hour() << "." << weeklyCourse->getEndTime().minute() << "." << weeklyCourse->getEndTime().second() << endl;
 		}
 		else
 		{
 			continue;
 		}
+		cout << endl;
 	}
 }
 
