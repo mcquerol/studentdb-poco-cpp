@@ -213,7 +213,6 @@ void SimpleUI::addNewStudent()
 	db->setStudent(student);
 }
 
-//TODO check if enrollment alreadyd exists using find_if
 void SimpleUI::addEnrollment()
 {
 	unsigned int matrikelNumber;
@@ -249,7 +248,22 @@ void SimpleUI::addEnrollment()
 	    	// Get the raw Course pointer
 	    	Course* course = const_cast<Course*>(it->second.get());
 	        // Call setEnrollment on the Student object
-	        db->getStudents().at(matrikelNumber).setEnrollment(grade, semester, course);
+	    	auto& enrollments = db->getStudents().at(matrikelNumber).getEnrollments();
+
+	    	auto it = std::find_if(enrollments.begin(), enrollments.end(), [&](const Enrollment& e) {
+	    	    return e.getGrade() == grade &&
+	    	           e.getSemester() == semester &&
+	    	           e.getCourse().getCourseKey() == courseKey;
+	    	});
+
+	    	if(it != enrollments.end())
+	    	{
+	    		cerr << "Enrollment already exsits" << endl;
+	    	}
+	    	else
+	    	{
+	    		db->getStudents().at(matrikelNumber).setEnrollment(grade, semester, course);
+	    	}
 	    }
 	    else
 	    {
