@@ -444,13 +444,13 @@ void SimpleUI::updateStudent()
 				{
 					auto& selectedEnrollment = enrollments[enrollmentIndex];
 
-					cout << "What would you like to do with the enrollment?" << endl;
-					cout << "1. Remove enrollment" << endl;
-					cout << "2. Add grade" << endl;
-					cin >> choice;
-
-					while(choice != 1 && choice != 2)
+					do
 					{
+						cout << "What would you like to do with the enrollment?" << endl;
+						cout << "1. Remove enrollment" << endl;
+						cout << "2. Add grade" << endl;
+						cin >> choice;
+
 						if(choice == 1)
 						{
 							db->getStudents().find(matrikelNumber)->second.removeEnrollment(enrollmentIndex);
@@ -461,7 +461,12 @@ void SimpleUI::updateStudent()
 							cin >> grade;
 							selectedEnrollment.setGrade(grade);
 						}
-					}
+					    else
+					    {
+					        cerr << "Invalid choice. Please select 1 or 2." << endl;
+					    }
+
+					}while(choice != 1 && choice != 2);
 				}
 				else
 				{
