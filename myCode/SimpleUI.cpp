@@ -185,7 +185,7 @@ void SimpleUI::addNewStudent()
 	string firstName;
 	string lastName;
 	int year, month, day;
-	Poco::Data::Date dateOfBirth(year, month, day);
+
 
 	string street;
 	unsigned short postalCode;
@@ -212,6 +212,7 @@ void SimpleUI::addNewStudent()
 	cout << "Enter any additional info: " << endl;
 	cin >> additionalInfo;
 
+	Poco::Data::Date dateOfBirth(year, month, day); //construct poco date object
 	Student student(firstName, lastName, dateOfBirth, street, postalCode, cityName, additionalInfo);
 	db->setStudent(student);
 }
