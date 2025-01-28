@@ -49,16 +49,6 @@ void SimpleUI::run()
 
 void SimpleUI::addNewCourse()
 {
-	cout << "-------------------------" << endl;
-	cout << "1. Add new course" << endl;
-	cout << "-------------------------" << endl;
-	cout << endl;
-
-	cout << "Enter W for Weeklycourse or B for Blockcourse" << endl;
-
-	char courseChoice;
-	cin >> courseChoice;
-
 	unsigned int courseKey;
 	string title;
 	string major;
@@ -71,34 +61,50 @@ void SimpleUI::addNewCourse()
 
 	int dayOfWeek;
 
+	char courseChoice;
+
+	cout << "-------------------------" << endl;
+	cout << "1. Add new course" << endl;
+	cout << "-------------------------" << endl;
+	cout << endl;
+
+	cout << "Enter W for Weeklycourse or B for Blockcourse" << endl;
+	do
+	{
+		cin >> courseChoice;
+	}
+	while(courseChoice != 'W' && courseChoice != 'w' && courseChoice != 'B' && courseChoice != 'b');
+
 	/* Course class parameters */
 	cout << "Enter Course key: ";
 	cin >> courseKey;
 	cout << "Enter Module title: ";
-	cin >> title;
+	cin.ignore();
+	getline(cin, title);
 	cout << "Enter Major: ";
-	cin >> major;
+	cin.ignore();
+	getline(cin, major);
 	cout << "Enter Credit points: ";
 	cin >> creditPoints;
-
-	cout << "Enter start time (h m s): ";
+	cout << "Enter start time (HH MM SS): ";
 	cin >> startHour >> startMinute >> startSecond;
-	cout << "Enter end time (h m s): ";
+	Poco::Data::Time startTime(startHour, startMinute, startSecond);
+	cout << "Enter end time (HH MM SS): ";
 	cin >> endHour >> endMinute >> endSecond;
+	Poco::Data::Time endTime(endHour, endMinute, endSecond););
 
-	Poco::Data::Time startTime = {startHour, startMinute, startSecond};
-	Poco::Data::Time endTime = {endHour, endMinute, endSecond};
+	//TODO error handlinf for poco?
 
 
-	if(courseChoice == 'B')
+	if(courseChoice == 'B' || courseChoice == 'b')
 	{
-		cout << "Enter start date (Y M D): ";
-		cin >> startYear >> startMonth >> startDay;
-		cout << "Enter end date (Y M D): ";
-		cin >> endYear >> endMonth >> endDay;
+		cout << "Enter start date (DD MM YYYY): ";
+		cin >> startDay >> startMonth >> startYear;
+		cout << "Enter end date (DD MM YYYY): ";
+		cin >> endDay >> endMonth >> endYear;
 
-		Poco::Data::Date startDate = {startYear, startMonth, startDay};
-		Poco::Data::Date endDate = {endYear, endMonth, endDay};
+		Poco::Data::Date startDate(startYear, startMonth, startDay);
+		Poco::Data::Date endDate(endYear, endMonth, endDay);
 
 		std::unique_ptr<BlockCourse> blockCourse = std::make_unique<BlockCourse>(courseKey, title, major, creditPoints);
 
@@ -110,7 +116,7 @@ void SimpleUI::addNewCourse()
 		db->setCourse(std::move(blockCourse));
 		cout << "Block course added" << endl;
 	}
-	else if(courseChoice == 'W')
+	else if(courseChoice == 'W' || courseChoice == 'w')
 	{
 		cout << "Enter day of the week (0-6): ";
 		cin >> dayOfWeek;
@@ -138,9 +144,9 @@ void SimpleUI::listCourses()
 	{
 		//data from base class
 		cout << "Course key: " << coursePtr.first << endl; // use the first iterator instead of having to use .second
-		cout << "Course Title: " << coursePtr.second->getTitle() << endl;
-		cout << "Course Major: " << coursePtr.second->getMajor() << endl;
-		cout << "Course Credit Points: " << coursePtr.second->getCreditPoints() << endl;
+		cout << "Title: " << coursePtr.second->getTitle() << endl;
+		cout << "Major: " << coursePtr.second->getMajor() << endl;
+		cout << "Credit Points: " << coursePtr.second->getCreditPoints() << endl;
 
 		auto* blockCourse = dynamic_cast<BlockCourse*>(const_cast<Course*>(coursePtr.second.get()));
 		auto* weeklyCourse = dynamic_cast<WeeklyCourse*>(const_cast<Course*>(coursePtr.second.get()));
@@ -158,10 +164,6 @@ void SimpleUI::listCourses()
 			cout << "Start Time: " << weeklyCourse->getStartTime().hour() << "." << weeklyCourse->getStartTime().minute() << "." << weeklyCourse->getStartTime().second() << endl;
 			cout << "End Time: " << weeklyCourse->getEndTime().hour() << "." << weeklyCourse->getEndTime().minute() << "." << weeklyCourse->getEndTime().second() << endl;
 		}
-		else
-		{
-			continue;
-		}
 		cout << endl;
 	}
 }
@@ -171,7 +173,6 @@ void SimpleUI::addNewStudent()
 	string firstName;
 	string lastName;
 	int year, month, day;
-
 
 	string street;
 	unsigned short postalCode;
@@ -184,21 +185,26 @@ void SimpleUI::addNewStudent()
 	cout << endl;
 
 	cout << "Enter first name: " << endl;
-	cin >> firstName;
+	cin.ignore();
+	getline(cin, firstName);
 	cout << "Enter last name: " << endl;
-	cin >> lastName;
-	cout << "Enter date of birth (Y M D): " << endl;
-	cin >> year >> month >> day;
+	cin.ignore();
+	getline(cin, lastName);
+	cout << "Enter date of birth (DD MM YYYY): " << endl;
+	cin >> day >> month >> year;
+	Poco::Data::Date dateOfBirth(year, month, day); //construct poco date object
 	cout << "Enter street" << endl;
-	cin >> street;
+	cin.ignore();
+	getline(cin, street);
 	cout << "Enter postal code" << endl;
 	cin >> postalCode;
 	cout << "Enter City name: " << endl;
-	cin >> cityName;
+	cin.ignore();
+	getline(cin, cityName);
 	cout << "Enter any additional info: " << endl;
-	cin >> additionalInfo;
+	cin.ignore();
+	getline(cin, additionalInfo);
 
-	Poco::Data::Date dateOfBirth(year, month, day); //construct poco date object
 	Student student(firstName, lastName, dateOfBirth, street, postalCode, cityName, additionalInfo);
 	db->setStudent(student);
 }
@@ -220,7 +226,8 @@ void SimpleUI::addEnrollment()
 	cout << "Enter grade: " << endl;
 	cin >> grade;
 	cout << "Enter semester: " << endl;
-	cin >> semester;
+	cin.ignore();
+	getline(cin, semester);
 	cout << "Enter course key: " << endl;
 	cin >> courseKey;
 
@@ -279,6 +286,7 @@ void SimpleUI::printStudent()
 	cout << "Enter matrikel number: " << endl;
 	cin >> matrikelNumber;
 
+	cout << endl;
     cout << "Info for: " << matrikelNumber << endl;
     cout << "-------------------------" << endl;
 
@@ -296,16 +304,16 @@ void SimpleUI::printStudent()
 
 		cout << endl;
 
-		cout << "Enrollment info" << endl;
+		cout << "\tEnrollment info" << endl;
 
 		for(const auto& enrollment : it->second.getEnrollments())
 		{
-			cout << "\tSemester: " << enrollment.getSemester() << endl;
-			cout << "\tGrade: " << enrollment.getGrade() << endl;
-			cout << "Course info for: " << enrollment.getCourse().getCourseKey() << endl;
-			cout << "\tTitle: " << enrollment.getCourse().getTitle() << endl;
-			cout << "\tMajor: " << enrollment.getCourse().getMajor() << endl;
-			cout << "\tCreditPoints: " << enrollment.getCourse().getCreditPoints() << endl;
+			cout << "\t\tSemester: " << enrollment.getSemester() << endl;
+			cout << "\t\tGrade: " << enrollment.getGrade() << endl;
+			cout << "\tCourse info for: " << enrollment.getCourse().getCourseKey() << endl;
+			cout << "\t\tTitle: " << enrollment.getCourse().getTitle() << endl;
+			cout << "\t\tMajor: " << enrollment.getCourse().getMajor() << endl;
+			cout << "\t\tCreditPoints: " << enrollment.getCourse().getCreditPoints() << endl;
 		}
 		cout << endl;
 	}
@@ -325,7 +333,8 @@ void SimpleUI::searchStudent()
 	cout << endl;
 
 	cout << "Enter a string to search for a student: " << endl;
-	cin >> stringToSearch;
+	cin.ignore();
+	getline(cin, stringToSearch);
 
 	for(const auto& students : db->getStudents())
 	{
@@ -393,16 +402,18 @@ void SimpleUI::updateStudent()
 		{
 		case 1:
 			cout << "Enter first name: " << endl;
-			cin >> firstName;
+			cin.ignore();
+			getline(cin, firstName);
 			db->getStudents().at(matrikelNumber).setFirstName(firstName);
 		break;
 		case 2:
 			cout << "Enter last name: " << endl;
-			cin >> lastName;
+			cin.ignore();
+			getline(cin, lastName);
 			db->getStudents().at(matrikelNumber).setLastName(lastName);
 		break;
 		case 3:
-			cout << "Enter date of birth (Y M D): " << endl;
+			cout << "Enter date of birth (DD MM YYYY): " << endl;
 			cin >> year >> month >> day;
 			Poco::Data::Date dateOfBirth(year, month, day);
 			db->getStudents().at(matrikelNumber).setDateOfBirth(dateOfBirth);
@@ -410,17 +421,20 @@ void SimpleUI::updateStudent()
 		case 4:
 			cout << "Enter street: " << endl;
 			cin >> street;
+			cin.ignore();
+			getline(cin, street);
 			cout << "Enter postal code:" << endl;
 			cin >> postalCode;
 			cout << "Enter City name: " << endl;
-			cin >> cityName;
+			cin.ignore();
+			getline(cin, cityName);
 			cout << "Enter any additional info: " << endl;
-			cin >> additionalInfo;
+			cin.ignore();
+			getline(cin, additionalInfo);
+
 			db->getStudents().at(matrikelNumber).setAddress(Address(street, postalCode, cityName, additionalInfo));
 		break;
-		case 0:
-			return;
-		break;
+		case 0: return;
 		default:
 			size_t enrollmentIndex = choice - 5; // Calculate index for vector
 			if (enrollmentIndex < enrollments.size())
