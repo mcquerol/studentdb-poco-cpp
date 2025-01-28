@@ -387,8 +387,6 @@ void SimpleUI::updateStudent()
 		cout << "2. Last name" << endl;
 		cout << "3. Date of birth" << endl;
 		cout << "4. Address" << endl;
-		cout << "0. Exit" << endl;
-		cout << "Enter your choice (1-4 or 0)" << endl;
 
 		auto& enrollments = db->getStudents().at(matrikelNumber).getEnrollments();
 		for (size_t i = 0; i < enrollments.size(); i++)
@@ -397,71 +395,80 @@ void SimpleUI::updateStudent()
 		    cout << (i + 5) << ". [Enrollment #" << (i + 1) << " Semester: " << enrollment.getSemester() << ", Grade: " << enrollment.getGrade() << "]" <<endl;
 		}
 
-		cin >> choice;
-		switch(choice)
+		cout << "0. Exit" << endl;
+		cout << "Enter your choice: " << endl;
+
+		while(1)
 		{
-		case 1:
-			cout << "Enter first name: " << endl;
-			cin.ignore();
-			getline(cin, firstName);
-			db->getStudents().at(matrikelNumber).setFirstName(firstName);
-		break;
-		case 2:
-			cout << "Enter last name: " << endl;
-			cin.ignore();
-			getline(cin, lastName);
-			db->getStudents().at(matrikelNumber).setLastName(lastName);
-		break;
-		case 3:
-			cout << "Enter date of birth (DD MM YYYY): " << endl;
-			cin >> year >> month >> day;
-			Poco::Data::Date dateOfBirth(year, month, day);
-			db->getStudents().at(matrikelNumber).setDateOfBirth(dateOfBirth);
-		break;
-		case 4:
-			cout << "Enter street: " << endl;
-			cin >> street;
-			cin.ignore();
-			getline(cin, street);
-			cout << "Enter postal code:" << endl;
-			cin >> postalCode;
-			cout << "Enter City name: " << endl;
-			cin.ignore();
-			getline(cin, cityName);
-			cout << "Enter any additional info: " << endl;
-			cin.ignore();
-			getline(cin, additionalInfo);
-
-			db->getStudents().at(matrikelNumber).setAddress(Address(street, postalCode, cityName, additionalInfo));
-		break;
-		case 0: return;
-		default:
-			size_t enrollmentIndex = choice - 5; // Calculate index for vector
-			if (enrollmentIndex < enrollments.size())
+			cin >> choice;
+			switch(choice)
 			{
-				auto& selectedEnrollment = enrollments[enrollmentIndex];
+			case 1:
+				cout << "Enter first name: " << endl;
+				cin.ignore();
+				getline(cin, firstName);
+				db->getStudents().at(matrikelNumber).setFirstName(firstName);
+			break;
+			case 2:
+				cout << "Enter last name: " << endl;
+				cin.ignore();
+				getline(cin, lastName);
+				db->getStudents().at(matrikelNumber).setLastName(lastName);
+			break;
+			case 3:
+				cout << "Enter date of birth (DD MM YYYY): " << endl;
+				cin >> year >> month >> day;
+				Poco::Data::Date dateOfBirth(year, month, day);
+				db->getStudents().at(matrikelNumber).setDateOfBirth(dateOfBirth);
+			break;
+			case 4:
+				cout << "Enter street: " << endl;
+				cin >> street;
+				cin.ignore();
+				getline(cin, street);
+				cout << "Enter postal code:" << endl;
+				cin >> postalCode;
+				cout << "Enter City name: " << endl;
+				cin.ignore();
+				getline(cin, cityName);
+				cout << "Enter any additional info: " << endl;
+				cin.ignore();
+				getline(cin, additionalInfo);
 
-				cout << "What would you like to do with the enrollment?" << endl;
-				cout << "1. Remove enrollment" << endl;
-				cout << "2. Add grade" << endl;
-				cin >> choice;
+				db->getStudents().at(matrikelNumber).setAddress(Address(street, postalCode, cityName, additionalInfo));
+			break;
+			case 0: return;
+			default:
+				size_t enrollmentIndex = choice - 5; // Calculate index for vector
+				if (enrollmentIndex < enrollments.size())
+				{
+					auto& selectedEnrollment = enrollments[enrollmentIndex];
 
-				if(choice == 1)
-				{
-					db->getStudents().find(matrikelNumber)->second.removeEnrollment(enrollmentIndex);
+					cout << "What would you like to do with the enrollment?" << endl;
+					cout << "1. Remove enrollment" << endl;
+					cout << "2. Add grade" << endl;
+					cin >> choice;
+
+					while(choice != 1 && choice != 2)
+					{
+						if(choice == 1)
+						{
+							db->getStudents().find(matrikelNumber)->second.removeEnrollment(enrollmentIndex);
+						}
+						else if (choice == 2)
+						{
+							cout << "Enter grade: " << endl;
+							cin >> grade;
+							selectedEnrollment.setGrade(grade);
+						}
+					}
 				}
-				else if (choice == 2)
+				else
 				{
-					cout << "Enter grade: " << endl;
-					cin >> grade;
-					selectedEnrollment.setGrade(grade);
+					cerr << "Invalid choice! Please select a valid enrollment." << endl;
 				}
+			break;
 			}
-			else
-			{
-				cerr << "Invalid choice! Please select a valid enrollment." << endl;
-			}
-		break;
 		}
 	}
 	else
