@@ -19,6 +19,7 @@ void SimpleUI::run()
 
 	while(1)
 	{
+		cout << endl;
 		cout << "Select an option:" << endl;
 		cout << "1. Add new course" << endl;
 		cout << "2. List courses" << endl;
@@ -138,7 +139,7 @@ void SimpleUI::addNewCourse()
 		db->setCourse(std::move(weeklyCourse));
 		cout << "Weekly course added" << endl;
 	}
-
+	cout << endl;
 }
 
 void SimpleUI::listCourses()
@@ -321,6 +322,7 @@ void SimpleUI::printStudent()
 			cout << "\tMajor: " << enrollment.getCourse().getMajor() << endl;
 			cout << "\tCreditPoints: " << enrollment.getCourse().getCreditPoints() << endl;
 		}
+		cout << endl;
 	}
 	else
 	{
@@ -367,7 +369,6 @@ void SimpleUI::updateStudent()
 	string firstName;
 	string lastName;
 	int year, month, day;
-	Poco::Data::Date dateOfBirth(year, month, day);
 
 	string street;
 	unsigned short postalCode;
@@ -418,6 +419,7 @@ void SimpleUI::updateStudent()
 		case 3:
 			cout << "Enter date of birth (Y M D): " << endl;
 			cin >> year >> month >> day;
+			Poco::Data::Date dateOfBirth(year, month, day);
 			db->getStudents().at(matrikelNumber).setDateOfBirth(dateOfBirth);
 		break;
 		case 4:
