@@ -91,7 +91,7 @@ void SimpleUI::addNewCourse()
 	Poco::Data::Time startTime(startHour, startMinute, startSecond);
 	cout << "Enter end time (HH MM SS): ";
 	cin >> endHour >> endMinute >> endSecond;
-	Poco::Data::Time endTime(endHour, endMinute, endSecond););
+	Poco::Data::Time endTime(endHour, endMinute, endSecond);
 
 	//TODO error handlinf for poco?
 
