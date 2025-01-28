@@ -1,14 +1,11 @@
-#include <Poco/LocalDateTime.h>
-#include <Poco/DateTimeFormatter.h>
-#include <iostream>
+#include "SimpleUI.h"
 
-int main() {
-    // Get the current local date and time
-    Poco::LocalDateTime localNow;
+int main (void)
+{
+	StudentDb db;
+	SimpleUI ui(db);
 
-    // Format the current local date and time as a string
-    std::string formattedLocalDateTime = Poco::DateTimeFormatter::format(localNow, "%Y-%m-%d %H:%M:%S");
-    std::cout << "Local DateTime: " << formattedLocalDateTime << std::endl;
+	ui.run();
 
-    return 0;
+	return 0;
 }
