@@ -363,6 +363,7 @@ void SimpleUI::updateStudent()
 	string firstName;
 	string lastName;
 	int year, month, day;
+	Poco::Data::Date dateOfBirth;
 
 	string street;
 	unsigned short postalCode;
@@ -417,8 +418,8 @@ void SimpleUI::updateStudent()
 			break;
 			case 3:
 				cout << "Enter date of birth (DD MM YYYY): " << endl;
-				cin >> year >> month >> day;
-				Poco::Data::Date dateOfBirth(year, month, day);
+				cin >> day >> month >> year;
+				dateOfBirth = Poco::Data::Date(year, month, day);
 				db->getStudents().at(matrikelNumber).setDateOfBirth(dateOfBirth);
 			break;
 			case 4:
@@ -437,7 +438,9 @@ void SimpleUI::updateStudent()
 
 				db->getStudents().at(matrikelNumber).setAddress(Address(street, postalCode, cityName, additionalInfo));
 			break;
-			case 0: return;
+			case 0:
+				return;
+				break;
 			default:
 				size_t enrollmentIndex = choice - 5; // Calculate index for vector
 				if (enrollmentIndex < enrollments.size())
