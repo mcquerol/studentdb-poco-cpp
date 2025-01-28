@@ -34,30 +34,15 @@ void SimpleUI::run()
 
 		switch(choice)
 		{
-			case 1 :
-				addNewCourse();
-				break;
-			case 2 :
-				listCourses();
-				break;
-			case 3 :
-				addNewStudent();
-				break;
-			case 4 :
-				addEnrollment();
-				break;
-			case 5 :
-				printStudent();
-				break;
-			case 6 :
-				searchStudent();
-				break;
-			case 7 :
-				updateStudent();
-				break;
-			case 0 :
-				cerr << "Program Terminated" << endl;
-				return;
+			case 1 : addNewCourse(); break;
+			case 2 : listCourses(); break;
+			case 3 : addNewStudent(); break;
+			case 4 : addEnrollment(); break;
+			case 5 : printStudent(); break;
+			case 6 : searchStudent(); break;
+			case 7 : updateStudent(); break;
+			case 0 : cerr << "Program Terminated" << endl; return;
+			default: cerr << "Invalid choice. Please try again." << endl;
 		}
 	}
 }
