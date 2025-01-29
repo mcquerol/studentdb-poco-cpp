@@ -8,6 +8,201 @@
 
 using namespace std;
 
+/* Error handling and input validation help functions
+ *
+ */
+Poco::Data::Date getValidatedDate(const std::string& prompt)
+{
+    Poco::Data::Date date; // Placeholder for the valid date
+
+    while (1)
+    {
+        try
+        {
+            int day, month, year;
+            std::cout << prompt; // Show the prompt to the user
+            std::cin >> day >> month >> year;
+
+            date = Poco::Data::Date(year, month, day); // Attempt to construct a valid date
+            return date; // Return the valid date if no exception is thrown
+        }
+        catch (const Poco::InvalidArgumentException& ex)
+        {
+            std::cerr << "Invalid date. Please try again in the format DD MM YYYY." << std::endl;
+
+            std::cin.clear(); // Clear input errors
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+        }
+    }
+}
+
+Poco::Data::Time getValidatedTime(const std::string& prompt)
+{
+    Poco::Data::Time time; // Placeholder for the valid time
+
+    while (1)
+    {
+        try
+        {
+            int hour, minute, second;
+            std::cout << prompt; // Show the prompt to the user
+            std::cin >> hour >> minute >> second;
+
+            // Optional manual validation for ranges
+            if (hour < 0 || hour > 23 || minute < 0 || minute > 59 || second < 0 || second > 59)
+            {
+                throw Poco::InvalidArgumentException("Time values out of range.");
+            }
+
+            time = Poco::Data::Time(hour, minute, second); // Construct the valid time
+            return time; // Return the valid time if no exception is thrown
+        }
+        catch (const Poco::InvalidArgumentException& ex)
+        {
+            std::cerr << "Invalid time. Please try again in the format HH MM SS." << std::endl;
+
+            std::cin.clear(); // Clear input errors
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+        }
+    }
+}
+
+Poco::DateTime::DaysOfWeek getValidatedDayOfWeek(const std::string& prompt)
+{
+	int dayOfWeek;
+
+	while(1)
+	{
+		cout << prompt;
+		cin >> dayOfWeek;
+
+		if(cin.fail() || dayOfWeek < 0 || dayOfWeek > 6)
+		{
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cerr << "Invalid input. Please enter a number between 0 and 6." << std::endl;
+		}
+		else
+		{
+			return static_cast<Poco::DateTime::DaysOfWeek>(dayOfWeek);
+		}
+	}
+}
+
+int getValidatedInt(const std::string& prompt, int min = 0, int max = INT_MAX)
+{
+    int value;
+    while (true) {
+        std::cout << prompt;
+        std::cin >> value;
+
+        if (std::cin.fail() || value < min || value > max) {
+            std::cin.clear();  // Clear error state
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Discard invalid input
+            std::cerr << "Invalid input. Please enter a number between " << min << " and " << max << "." << std::endl;
+        } else {
+            return value;  // Valid input
+        }
+    }
+}
+
+unsigned int getValidatedUnsignedInt(const std::string& prompt, unsigned int min = 0, unsigned int max = UINT_MAX)
+{
+    int value;  // Use signed int for initial validation to detect negative input
+    while (true) {
+        std::cout << prompt;
+        std::cin >> value;
+
+        if (std::cin.fail() || value < static_cast<int>(min) || value > static_cast<int>(max)) {
+            std::cin.clear();  // Clear the error flag
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Discard invalid input
+            std::cerr << "Invalid input. Please enter a number between " << min << " and " << max << "." << std::endl;
+        } else {
+            return static_cast<unsigned int>(value);  // Safe to cast once validated
+        }
+    }
+}
+
+float getValidatedFloat(const std::string& prompt, float min = 0.0, float max = FLT_MAX)
+{
+    float value;
+    while (true) {
+        std::cout << prompt;
+        std::cin >> value;
+
+        if (std::cin.fail() || value < min || value > max) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cerr << "Invalid input. Please enter a number between " << min << " and " << max << "." << std::endl;
+        } else {
+            return value;
+        }
+    }
+}
+
+std::string getValidatedString(const std::string& prompt, bool allowNumbers = true)
+{
+    std::string input;
+    while (true) {
+        std::cout << prompt;
+        std::cin.ignore();
+        std::getline(std::cin, input);
+
+        if (input.empty()) {
+            std::cerr << "Input cannot be empty. Please try again." << std::endl;
+            continue;
+        }
+
+        if (!allowNumbers && input.find_first_of("0123456789") != std::string::npos) {
+            std::cerr << "Invalid input. Numbers are not allowed." << std::endl;
+            continue;
+        }
+
+        return input;
+    }
+}
+
+std::string getValidatedMajor(const std::string& prompt)
+{
+    const auto& majorMap = Course::getMajorById(); // Access the static map
+    string majorInput;
+    while (1)
+    {
+        cout << prompt;
+        getline(std::cin, majorInput);
+        // Check user input against map values
+        for (const auto& pair : majorMap)
+        {
+        	if(majorInput == pair.second)
+        	{
+        		return majorInput;
+        	}
+        }
+        // If no match was found, print error and continue loop
+    	cerr << "Invalid major. Please enter Automation, Communications, Embedded, or Power." << endl;
+    }
+}
+
+unsigned short getValidatedPostalCode(const string& prompt)
+{
+	unsigned short postalCode;
+	while(1)
+	{
+        std::cout << prompt;
+        std::cin >> postalCode;
+		if(cin.fail() || postalCode < 0)
+		{
+			cin.clear();  // Clear the error flag
+			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Discard invalid input
+			cerr << "Invalid input. Please enter a number greater than 0 " << endl;
+		}
+		else
+		{
+			return postalCode;
+		}
+	}
+}
+
 SimpleUI::SimpleUI(StudentDb &db)
 {
 	this->db = &db;
@@ -53,13 +248,9 @@ void SimpleUI::addNewCourse()
 	string title;
 	string major;
 	float creditPoints;
-
-	int startHour, startMinute, startSecond;
-	int endHour, endMinute, endSecond;
-	int startYear, startMonth, startDay;
-	int endYear, endMonth, endDay;
-
-	int dayOfWeek;
+	Poco::Data::Time startTime;
+	Poco::Data::Time endTime;
+	Poco::DateTime::DaysOfWeek dayOfWeek;
 
 	char courseChoice;
 
@@ -76,35 +267,17 @@ void SimpleUI::addNewCourse()
 	while(courseChoice != 'W' && courseChoice != 'w' && courseChoice != 'B' && courseChoice != 'b');
 
 	/* Course class parameters */
-	cout << "Enter Course key: ";
-	cin >> courseKey;
-	cout << "Enter Module title: ";
-	cin.ignore();
-	getline(cin, title);
-	cout << "Enter Major: ";
-	cin.ignore();
-	getline(cin, major);
-	cout << "Enter Credit points: ";
-	cin >> creditPoints;
-	cout << "Enter start time (HH MM SS): ";
-	cin >> startHour >> startMinute >> startSecond;
-	Poco::Data::Time startTime(startHour, startMinute, startSecond);
-	cout << "Enter end time (HH MM SS): ";
-	cin >> endHour >> endMinute >> endSecond;
-	Poco::Data::Time endTime(endHour, endMinute, endSecond);
-
-	//TODO error handlinf for poco?
-
+    courseKey = getValidatedUnsignedInt("Enter Course key (positive number): ", 1);
+    title = getValidatedString("Enter Module title: ");
+    major = getValidatedMajor("Enter Major (Automation, Communications, Embedded, Power): ");
+    creditPoints = getValidatedFloat("Enter Credit points: ", 0.0, 5.0);
+	startTime = getValidatedTime("Enter start time (HH MM SS): ");
+	endTime = getValidatedTime("Enter end time (HH MM SS): ");
 
 	if(courseChoice == 'B' || courseChoice == 'b')
 	{
-		cout << "Enter start date (DD MM YYYY): ";
-		cin >> startDay >> startMonth >> startYear;
-		cout << "Enter end date (DD MM YYYY): ";
-		cin >> endDay >> endMonth >> endYear;
-
-		Poco::Data::Date startDate(startYear, startMonth, startDay);
-		Poco::Data::Date endDate(endYear, endMonth, endDay);
+		Poco::Data::Date startDate = getValidatedDate("Enter start date (DD MM YYYY): ");
+		Poco::Data::Date endDate = getValidatedDate("Enter end date (DD MM YYYY): ");
 
 		std::unique_ptr<BlockCourse> blockCourse = std::make_unique<BlockCourse>(courseKey, title, major, creditPoints);
 
@@ -118,8 +291,7 @@ void SimpleUI::addNewCourse()
 	}
 	else if(courseChoice == 'W' || courseChoice == 'w')
 	{
-		cout << "Enter day of the week (0-6): ";
-		cin >> dayOfWeek;
+		dayOfWeek = getValidatedDayOfWeek("Enter day of the week (0-6): ");
 
 		std::unique_ptr<WeeklyCourse> weeklyCourse = std::make_unique<WeeklyCourse>(courseKey, title, major, creditPoints);
 
@@ -172,8 +344,6 @@ void SimpleUI::addNewStudent()
 {
 	string firstName;
 	string lastName;
-	int year, month, day;
-
 	string street;
 	unsigned short postalCode;
 	string cityName;
@@ -190,9 +360,7 @@ void SimpleUI::addNewStudent()
 	cout << "Enter last name: " << endl;
 	cin.ignore();
 	getline(cin, lastName);
-	cout << "Enter date of birth (DD MM YYYY): " << endl;
-	cin >> day >> month >> year;
-	Poco::Data::Date dateOfBirth(year, month, day); //construct poco date object
+	Poco::Data::Date dateOfBirth = getValidatedDate("Enter start date (DD MM YYYY): ");
 	cout << "Enter street" << endl;
 	cin.ignore();
 	getline(cin, street);
@@ -362,7 +530,7 @@ void SimpleUI::updateStudent()
 
 	string firstName;
 	string lastName;
-	int year, month, day;
+
 	Poco::Data::Date dateOfBirth;
 
 	string street;
@@ -417,9 +585,7 @@ void SimpleUI::updateStudent()
 				db->getStudents().at(matrikelNumber).setLastName(lastName);
 			break;
 			case 3:
-				cout << "Enter date of birth (DD MM YYYY): " << endl;
-				cin >> day >> month >> year;
-				dateOfBirth = Poco::Data::Date(year, month, day);
+				dateOfBirth = getValidatedDate("Enter start date (DD MM YYYY): ");
 				db->getStudents().at(matrikelNumber).setDateOfBirth(dateOfBirth);
 			break;
 			case 4:
@@ -440,7 +606,6 @@ void SimpleUI::updateStudent()
 			break;
 			case 0:
 				return;
-				break;
 			default:
 				size_t enrollmentIndex = choice - 5; // Calculate index for vector
 				if (enrollmentIndex < enrollments.size())
