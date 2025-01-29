@@ -129,9 +129,15 @@ float SimpleUI::getValidatedFloat(const std::string& prompt, float min, float ma
 std::string SimpleUI::getValidatedString(const std::string& prompt, bool allowNumbers)
 {
     std::string input;
+
     while (true) {
         std::cout << prompt;
-        std::cin.ignore();
+
+        // If previous input was `cin >>`, clear the buffer once
+        if (std::cin.peek() == '\n') {
+            std::cin.ignore();
+        }
+
         std::getline(std::cin, input);
 
         if (input.empty()) {
@@ -147,6 +153,9 @@ std::string SimpleUI::getValidatedString(const std::string& prompt, bool allowNu
         return input;
     }
 }
+
+
+
 
 std::string SimpleUI::getValidatedMajor(const std::string& prompt)
 {
@@ -348,8 +357,9 @@ void SimpleUI::addNewStudent()
 	cout << "-------------------------" << endl;
 	cout << endl;
 
-	firstName = getValidatedString("Enter first name: ");
-	lastName = getValidatedString("Enter last name: ");
+
+	firstName = getValidatedString("Enter first name: ", true);
+	lastName = getValidatedString("Enter last name: ", true);
 	Poco::Data::Date dateOfBirth = getValidatedDate("Enter start date (DD MM YYYY): ");
 
 	street = getValidatedString("Enter street: ");
@@ -446,7 +456,7 @@ void SimpleUI::printStudent()
 		cout << "\tstreet: "<< it->second.address.getStreet() << endl;
 		cout << "\tpostal code: "<< it->second.address.getPostalCode() << endl;
 		cout << "\tcity name: " << it->second.address.getCityName() << endl;
-		cout << "\tadditional info" << it->second.address.getAdditionalInfo() << endl;
+		cout << "\tadditional info: " << it->second.address.getAdditionalInfo() << endl;
 
 		cout << endl;
 
