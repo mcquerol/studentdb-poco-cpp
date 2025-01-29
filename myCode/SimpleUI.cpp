@@ -89,23 +89,6 @@ Poco::DateTime::DaysOfWeek getValidatedDayOfWeek(const std::string& prompt)
 	}
 }
 
-int getValidatedInt(const std::string& prompt, int min = 0, int max = INT_MAX)
-{
-    int value;
-    while (true) {
-        std::cout << prompt;
-        std::cin >> value;
-
-        if (std::cin.fail() || value < min || value > max) {
-            std::cin.clear();  // Clear error state
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Discard invalid input
-            std::cerr << "Invalid input. Please enter a number between " << min << " and " << max << "." << std::endl;
-        } else {
-            return value;  // Valid input
-        }
-    }
-}
-
 unsigned int getValidatedUnsignedInt(const std::string& prompt, unsigned int min = 0, unsigned int max = UINT_MAX)
 {
     int value;  // Use signed int for initial validation to detect negative input
@@ -123,7 +106,7 @@ unsigned int getValidatedUnsignedInt(const std::string& prompt, unsigned int min
     }
 }
 
-float getValidatedFloat(const std::string& prompt, float min = 0.0, float max = FLT_MAX)
+float getValidatedFloat(const std::string& prompt, float min = 1.0, float max = 5.0)
 {
     float value;
     while (true) {
@@ -359,16 +342,11 @@ void SimpleUI::addNewStudent()
 	firstName = getValidatedString("Enter first name: ");
 	lastName = getValidatedString("Enter last name: ");
 	Poco::Data::Date dateOfBirth = getValidatedDate("Enter start date (DD MM YYYY): ");
+
 	street = getValidatedString("Enter street: ");
 	postalCode = getValidatedPostalCode("Enter postal code: ");
-
-
-	cout << "Enter City name: " << endl;
-	cin.ignore();
-	getline(cin, cityName);
-	cout << "Enter any additional info: " << endl;
-	cin.ignore();
-	getline(cin, additionalInfo);
+	cityName = getValidatedString("Enter City: ");
+	additionalInfo = getValidatedString("Enter any additional info: ");
 
 	Student student(firstName, lastName, dateOfBirth, street, postalCode, cityName, additionalInfo);
 	db->setStudent(student);
@@ -386,15 +364,10 @@ void SimpleUI::addEnrollment()
 	cout << "-------------------------" << endl;
 	cout << endl;
 
-	cout << "Enter matrikel number: " << endl;
-	cin >> matrikelNumber;
-	cout << "Enter grade: " << endl;
-	cin >> grade;
-	cout << "Enter semester: " << endl;
-	cin.ignore();
-	getline(cin, semester);
-	cout << "Enter course key: " << endl;
-	cin >> courseKey;
+	matrikelNumber = getValidatedUnsignedInt("Enter matrikel number: ");
+	grade = getValidatedFloat("Enter grade: ");
+	semester = getValidatedString("Enter semester: ");
+	courseKey = getValidatedUnsignedInt("Enter course key: ");
 
 	//access the enrollments but might need to create a setter for the enrollments vector
 	//check if the enrollment exists when trying to make it..so yea will need a settter
@@ -448,8 +421,7 @@ void SimpleUI::printStudent()
 	cout << "-------------------------" << endl;
 	cout << endl;
 
-	cout << "Enter matrikel number: " << endl;
-	cin >> matrikelNumber;
+	matrikelNumber = getValidatedUnsignedInt("Enter matrikel number: ");
 
 	cout << endl;
     cout << "Info for: " << matrikelNumber << endl;
@@ -497,9 +469,7 @@ void SimpleUI::searchStudent()
 	cout << "-------------------------" << endl;
 	cout << endl;
 
-	cout << "Enter a string to search for a student: " << endl;
-	cin.ignore();
-	getline(cin, stringToSearch);
+	stringToSearch = getValidatedString("Enter a string to search for a student: ");
 
 	for(const auto& students : db->getStudents())
 	{
@@ -542,8 +512,7 @@ void SimpleUI::updateStudent()
 	cout << "-------------------------" << endl;
 	cout << endl;
 
-	cout << "Enter matrikel number: " << endl;
-	cin >> matrikelNumber;
+	matrikelNumber = getValidatedUnsignedInt("Enter matrikel number: ");
 
 	if (db->getStudents().find(matrikelNumber) != db->getStudents().end())
 	{
@@ -564,42 +533,30 @@ void SimpleUI::updateStudent()
 		cout << "0. Exit" << endl;
 		cout << "Enter your choice: " << endl;
 
+		auto& student = db->getStudents().at(matrikelNumber);
 		while(1)
 		{
 			cin >> choice;
 			switch(choice)
 			{
 			case 1:
-				cout << "Enter first name: " << endl;
-				cin.ignore();
-				getline(cin, firstName);
-				db->getStudents().at(matrikelNumber).setFirstName(firstName);
+				firstName = getValidatedString("Enter first name: ");
+				student.setFirstName(firstName);
 			break;
 			case 2:
-				cout << "Enter last name: " << endl;
-				cin.ignore();
-				getline(cin, lastName);
-				db->getStudents().at(matrikelNumber).setLastName(lastName);
+				lastName = getValidatedString("Enter last name: ");
+				student.setLastName(lastName);
 			break;
 			case 3:
 				dateOfBirth = getValidatedDate("Enter start date (DD MM YYYY): ");
-				db->getStudents().at(matrikelNumber).setDateOfBirth(dateOfBirth);
+				student.setDateOfBirth(dateOfBirth);
 			break;
 			case 4:
-				cout << "Enter street: " << endl;
-				cin >> street;
-				cin.ignore();
-				getline(cin, street);
-				cout << "Enter postal code:" << endl;
-				cin >> postalCode;
-				cout << "Enter City name: " << endl;
-				cin.ignore();
-				getline(cin, cityName);
-				cout << "Enter any additional info: " << endl;
-				cin.ignore();
-				getline(cin, additionalInfo);
-
-				db->getStudents().at(matrikelNumber).setAddress(Address(street, postalCode, cityName, additionalInfo));
+				street = getValidatedString("Enter street: ");
+				postalCode = getValidatedPostalCode("Enter postal code: ");
+				cityName = getValidatedString("Enter City: ");
+				additionalInfo = getValidatedString("Enter any additional info: ");
+				student.setAddress(Address(street, postalCode, cityName, additionalInfo));
 			break;
 			case 0:
 				return;
@@ -608,7 +565,6 @@ void SimpleUI::updateStudent()
 				if (enrollmentIndex < enrollments.size())
 				{
 					auto& selectedEnrollment = enrollments[enrollmentIndex];
-
 					do
 					{
 						cout << "What would you like to do with the enrollment?" << endl;
