@@ -26,6 +26,8 @@ public:
 	const std::string& getMajor() const;
 	const std::string& getTitle() const;
 
+	//getter to use in simpleui class valdiation for major
+	static const std::map<unsigned char, std::string>& getMajorById();
 	
 };
 
