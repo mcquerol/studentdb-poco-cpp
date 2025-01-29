@@ -91,20 +91,23 @@ Poco::DateTime::DaysOfWeek SimpleUI::getValidatedDayOfWeek(const std::string& pr
 
 unsigned int SimpleUI::getValidatedUnsignedInt(const std::string& prompt, unsigned int min, unsigned int max)
 {
-    int value;  // Use signed int for initial validation to detect negative input
+    unsigned int value; // Variable to store the input
     while (true) {
         std::cout << prompt;
         std::cin >> value;
 
-        if (std::cin.fail() || value < static_cast<int>(min) || value > static_cast<int>(max)) {
-            std::cin.clear();  // Clear the error flag
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Discard invalid input
+        // Check if the input was invalid or out of range
+        if (std::cin.fail() || value < min || value > max) {
+            std::cin.clear(); // Clear the error flag
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
             std::cerr << "Invalid input. Please enter a number between " << min << " and " << max << "." << std::endl;
         } else {
-            return static_cast<unsigned int>(value);  // Safe to cast once validated
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear any trailing characters
+            return value; // Valid input
         }
     }
 }
+
 
 float SimpleUI::getValidatedFloat(const std::string& prompt, float min, float max)
 {
@@ -252,7 +255,13 @@ void SimpleUI::addNewCourse()
 	while(courseChoice != 'W' && courseChoice != 'w' && courseChoice != 'B' && courseChoice != 'b');
 
 	/* Course class parameters */
-    courseKey = getValidatedUnsignedInt("Enter Course key (positive number): ", 1);
+
+	courseKey = getValidatedUnsignedInt("Enter Course key: ", 1);
+	while (db->getCourses().find(courseKey) != db->getCourses().end())
+	{
+	    cerr << "Course key already exists. Please enter a unique Course key." << endl;
+	    courseKey = getValidatedUnsignedInt("Enter Course key: ", 1);
+	}
     title = getValidatedString("Enter Module title: ");
     major = getValidatedMajor("Enter Major (Automation, Communications, Embedded, Power): ");
     creditPoints = getValidatedFloat("Enter Credit points: ", 0.0, 5.0);
