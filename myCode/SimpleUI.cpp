@@ -384,9 +384,10 @@ void SimpleUI::addEnrollment()
 	cout << endl;
 
 	matrikelNumber = getValidatedUnsignedInt("Enter matrikel number: ");
+	courseKey = getValidatedUnsignedInt("Enter course key: ");
 	grade = getValidatedFloat("Enter grade: ");
 	semester = getValidatedString("Enter semester: ");
-	courseKey = getValidatedUnsignedInt("Enter course key: ");
+
 
 	//access the enrollments but might need to create a setter for the enrollments vector
 	//check if the enrollment exists when trying to make it..so yea will need a settter
@@ -405,9 +406,7 @@ void SimpleUI::addEnrollment()
 	    	auto& enrollments = db->getStudents().at(matrikelNumber).getEnrollments();
 
 	    	auto it = std::find_if(enrollments.begin(), enrollments.end(), [&](const Enrollment& e) {
-	    	    return e.getGrade() == grade &&
-	    	           e.getSemester() == semester &&
-	    	           e.getCourse().getCourseKey() == courseKey;
+	    	    return e.getCourse().getCourseKey() == courseKey;
 	    	});
 
 	    	if(it != enrollments.end())
