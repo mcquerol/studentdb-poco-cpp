@@ -489,6 +489,10 @@ void SimpleUI::searchStudent()
 			cout << "\tlast name: "<< students.second.getLastName() << endl;
 			cout << endl;
 		}
+		else
+		{
+			cerr << "No matching student containing : " << stringToSearch << endl;
+		}
 	}
 }
 
@@ -507,27 +511,26 @@ void SimpleUI::updateStudent()
 	if (db->getStudents().find(matrikelNumber) != db->getStudents().end())
 	{
 		auto& student = db->getStudents().at(matrikelNumber);
-
-		cout << "What would you like to update?: " << endl;
-		cout << "-------------------------" << endl;
-		cout << "1. First name" << endl;
-		cout << "2. Last name" << endl;
-		cout << "3. Date of birth" << endl;
-		cout << "4. Address" << endl;
-
 		auto& enrollments = student.getEnrollments();
-
-		for (size_t i = 0; i < enrollments.size(); i++)
-		{
-		    const auto& enrollment = enrollments[i];
-		    cout << (i + 5) << ". [Enrollment #" << (i + 1) << " Semester: " << enrollment.getSemester() << ", Grade: " << enrollment.getGrade() << "]" <<endl;
-		}
-
-		cout << "0. Exit" << endl;
-		cout << "Enter your choice: " << endl;
 
 		do
 		{
+			cout << "What would you like to update?: " << endl;
+			cout << "-------------------------" << endl;
+			cout << "1. First name" << endl;
+			cout << "2. Last name" << endl;
+			cout << "3. Date of birth" << endl;
+			cout << "4. Address" << endl;
+
+			for (size_t i = 0; i < enrollments.size(); i++)
+			{
+				const auto& enrollment = enrollments[i];
+				cout << (i + 5) << ". [Enrollment #" << (i + 1) << " Semester: " << enrollment.getSemester() << ", Grade: " << enrollment.getGrade() << "]" <<endl;
+			}
+
+			cout << "0. Exit" << endl;
+			cout << "Enter your choice: " << endl;
+
 			cin >> choice;
 			switch(choice)
 			{
