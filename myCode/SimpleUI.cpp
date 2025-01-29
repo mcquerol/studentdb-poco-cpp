@@ -11,7 +11,7 @@ using namespace std;
 /* Error handling and input validation help functions
  *
  */
-Poco::Data::Date getValidatedDate(const std::string& prompt)
+Poco::Data::Date SimpleUI::getValidatedDate(const std::string& prompt)
 {
     Poco::Data::Date date; // Placeholder for the valid date
 
@@ -36,7 +36,7 @@ Poco::Data::Date getValidatedDate(const std::string& prompt)
     }
 }
 
-Poco::Data::Time getValidatedTime(const std::string& prompt)
+Poco::Data::Time SimpleUI::getValidatedTime(const std::string& prompt)
 {
     Poco::Data::Time time; // Placeholder for the valid time
 
@@ -67,7 +67,7 @@ Poco::Data::Time getValidatedTime(const std::string& prompt)
     }
 }
 
-Poco::DateTime::DaysOfWeek getValidatedDayOfWeek(const std::string& prompt)
+Poco::DateTime::DaysOfWeek SimpleUI::getValidatedDayOfWeek(const std::string& prompt)
 {
 	int dayOfWeek;
 
@@ -89,7 +89,7 @@ Poco::DateTime::DaysOfWeek getValidatedDayOfWeek(const std::string& prompt)
 	}
 }
 
-unsigned int getValidatedUnsignedInt(const std::string& prompt, unsigned int min = 0, unsigned int max = UINT_MAX)
+unsigned int SimpleUI::getValidatedUnsignedInt(const std::string& prompt, unsigned int min, unsigned int max)
 {
     int value;  // Use signed int for initial validation to detect negative input
     while (true) {
@@ -106,7 +106,7 @@ unsigned int getValidatedUnsignedInt(const std::string& prompt, unsigned int min
     }
 }
 
-float getValidatedFloat(const std::string& prompt, float min = 1.0, float max = 5.0)
+float SimpleUI::getValidatedFloat(const std::string& prompt, float min, float max)
 {
     float value;
     while (true) {
@@ -123,7 +123,7 @@ float getValidatedFloat(const std::string& prompt, float min = 1.0, float max = 
     }
 }
 
-std::string getValidatedString(const std::string& prompt, bool allowNumbers = true)
+std::string SimpleUI::getValidatedString(const std::string& prompt, bool allowNumbers)
 {
     std::string input;
     while (true) {
@@ -145,7 +145,7 @@ std::string getValidatedString(const std::string& prompt, bool allowNumbers = tr
     }
 }
 
-std::string getValidatedMajor(const std::string& prompt)
+std::string SimpleUI::getValidatedMajor(const std::string& prompt)
 {
     const auto& majorMap = Course::getMajorById(); // Access the static map
     string majorInput;
@@ -166,7 +166,7 @@ std::string getValidatedMajor(const std::string& prompt)
     }
 }
 
-unsigned short getValidatedPostalCode(const string& prompt)
+unsigned short SimpleUI::getValidatedPostalCode(const std::string& prompt)
 {
 	unsigned short postalCode;
 	while(1)
@@ -483,29 +483,10 @@ void SimpleUI::searchStudent()
 	}
 }
 
-/*TODO change the add and remove enrollment methods
- *
- * Use references where necessary to avoid unnecessary copies.
- * Break down repetitive logic into helper functions for readability.
- * Add validation for user inputs to prevent runtime errors or bad data.
- *
- */
 void SimpleUI::updateStudent()
 {
 	unsigned int matrikelNumber;
 	int choice;
-
-	string firstName;
-	string lastName;
-
-	Poco::Data::Date dateOfBirth;
-
-	string street;
-	unsigned short postalCode;
-	string cityName;
-	string additionalInfo;
-
-	float grade;
 
 	cout << "-------------------------" << endl;
 	cout << "7. Update student" << endl;
@@ -516,6 +497,8 @@ void SimpleUI::updateStudent()
 
 	if (db->getStudents().find(matrikelNumber) != db->getStudents().end())
 	{
+		auto& student = db->getStudents().at(matrikelNumber);
+
 		cout << "What would you like to update?: " << endl;
 		cout << "-------------------------" << endl;
 		cout << "1. First name" << endl;
@@ -523,7 +506,8 @@ void SimpleUI::updateStudent()
 		cout << "3. Date of birth" << endl;
 		cout << "4. Address" << endl;
 
-		auto& enrollments = db->getStudents().at(matrikelNumber).getEnrollments();
+		auto& enrollments = student.getEnrollments();
+
 		for (size_t i = 0; i < enrollments.size(); i++)
 		{
 		    const auto& enrollment = enrollments[i];
@@ -533,69 +517,68 @@ void SimpleUI::updateStudent()
 		cout << "0. Exit" << endl;
 		cout << "Enter your choice: " << endl;
 
-		auto& student = db->getStudents().at(matrikelNumber);
-		while(1)
+		do
 		{
 			cin >> choice;
 			switch(choice)
 			{
 			case 1:
-				firstName = getValidatedString("Enter first name: ");
-				student.setFirstName(firstName);
+				student.setFirstName(getValidatedString("Enter first name: "));
 			break;
 			case 2:
-				lastName = getValidatedString("Enter last name: ");
-				student.setLastName(lastName);
+				student.setLastName(getValidatedString("Enter last name: "));
 			break;
 			case 3:
-				dateOfBirth = getValidatedDate("Enter start date (DD MM YYYY): ");
-				student.setDateOfBirth(dateOfBirth);
+				student.setDateOfBirth(getValidatedDate("Enter start date (DD MM YYYY): "));
 			break;
 			case 4:
-				street = getValidatedString("Enter street: ");
-				postalCode = getValidatedPostalCode("Enter postal code: ");
-				cityName = getValidatedString("Enter City: ");
-				additionalInfo = getValidatedString("Enter any additional info: ");
-				student.setAddress(Address(street, postalCode, cityName, additionalInfo));
-			break;
+	            student.setAddress
+				(
+	                Address
+					(
+	                    getValidatedString("Enter street: "),
+	                    getValidatedPostalCode("Enter postal code: "),
+	                    getValidatedString("Enter City: "),
+	                    getValidatedString("Enter any additional info: ")
+	                )
+	            );
+	            break;
 			case 0:
-				return;
+				cout << "Exiting update menu..." << endl;
+				return; //exit
 			default:
-				size_t enrollmentIndex = choice - 5; // Calculate index for vector
-				if (enrollmentIndex < enrollments.size())
-				{
-					auto& selectedEnrollment = enrollments[enrollmentIndex];
-					do
-					{
-						cout << "What would you like to do with the enrollment?" << endl;
-						cout << "1. Remove enrollment" << endl;
-						cout << "2. Add grade" << endl;
-						cin >> choice;
-
-						if(choice == 1)
-						{
-							db->getStudents().find(matrikelNumber)->second.removeEnrollment(enrollmentIndex);
-						}
-						else if (choice == 2)
-						{
-							cout << "Enter grade: " << endl;
-							cin >> grade;
-							selectedEnrollment.setGrade(grade);
-						}
-					    else
-					    {
-					        cerr << "Invalid choice. Please select 1 or 2." << endl;
-					    }
-
-					}while(choice != 1 && choice != 2);
-				}
-				else
-				{
-					cerr << "Invalid choice! Please select a valid enrollment." << endl;
-				}
 			break;
 			}
-		}
+
+		    // Dynamically handle enrollments (Choices 5 and beyond)
+			if (choice >= 5 && choice < static_cast<int>(5 + enrollments.size()))
+		    {
+		    	size_t enrollmentIndex = choice - 5; // Calculate index for vector
+				auto& selectedEnrollment = enrollments[enrollmentIndex];
+
+				do
+				{
+					cout << "What would you like to do with the enrollment?" << endl;
+					cout << "1. Remove enrollment" << endl;
+					cout << "2. Add grade" << endl;
+					cin >> choice;
+
+					if(choice == 1)
+					{
+						student.removeEnrollment(enrollmentIndex);
+					}
+					else if (choice == 2)
+					{
+						selectedEnrollment.setGrade(getValidatedFloat("Enter grade: "));
+					}
+				    else
+				    {
+				        cerr << "Invalid choice. Please select 1 or 2." << endl;
+				    }
+
+				} while(choice != 1 && choice != 2);
+			}
+		} while (choice != 0);
 	}
 	else
 	{
