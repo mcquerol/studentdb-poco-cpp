@@ -198,10 +198,12 @@ unsigned short getValidatedPostalCode(const string& prompt)
 		}
 		else
 		{
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear any trailing input
 			return postalCode;
 		}
 	}
 }
+
 
 SimpleUI::SimpleUI(StudentDb &db)
 {
@@ -354,18 +356,13 @@ void SimpleUI::addNewStudent()
 	cout << "-------------------------" << endl;
 	cout << endl;
 
-	cout << "Enter first name: " << endl;
-	cin.ignore();
-	getline(cin, firstName);
-	cout << "Enter last name: " << endl;
-	cin.ignore();
-	getline(cin, lastName);
+	firstName = getValidatedString("Enter first name: ");
+	lastName = getValidatedString("Enter last name: ");
 	Poco::Data::Date dateOfBirth = getValidatedDate("Enter start date (DD MM YYYY): ");
-	cout << "Enter street" << endl;
-	cin.ignore();
-	getline(cin, street);
-	cout << "Enter postal code" << endl;
-	cin >> postalCode;
+	street = getValidatedString("Enter street: ");
+	postalCode = getValidatedPostalCode("Enter postal code: ");
+
+
 	cout << "Enter City name: " << endl;
 	cin.ignore();
 	getline(cin, cityName);
