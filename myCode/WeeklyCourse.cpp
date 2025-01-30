@@ -1,5 +1,5 @@
 #include "WeeklyCourse.h"
-
+#include <ostream>
 
 WeeklyCourse::WeeklyCourse(unsigned int courseKey, std::string title, std::string major, float creditPoints)
 : Course(courseKey,title,major,creditPoints)
@@ -49,5 +49,7 @@ void WeeklyCourse::write(std::ostream &out) const
 {
 	out << "W;";
 	write(out);
-	out << dayOfWeek << ';' << startTime << ';' << endTime << "\n";
+	out << dayOfWeek << ';';
+	out << startTime.second() << '.' << startTime.minute() << '.' << startTime.hour() << ';';
+	out << endTime.second() << '.' << endTime.minute() << '.' << endTime.hour() << "\n";
 }
