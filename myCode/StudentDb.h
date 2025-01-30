@@ -27,7 +27,8 @@ public:
 	void setCourse(std::unique_ptr<Course> course);
 	void setStudent(Student student);
 
-	void write(std::ostream& out) const; //write attributes to os stream
+	void write(std::ostream& out) const; //write attributes to ostream
+	void read(std::istream& in) const; //read data to instream
 };
 
 #endif
