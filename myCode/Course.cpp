@@ -1,4 +1,5 @@
 #include "Course.h"
+#include <ostream>
 
 
 std::map<unsigned char, std::string> Course::majorById =
@@ -59,7 +60,13 @@ const std::string& Course::getTitle() const
 	return title;
 }
 
-const std::map<unsigned char, std::string>& Course::getMajorById() {
+void Course::write(std::ostream &out) const
+{
+	out << courseKey << ";" << title << ";" << majorById.at(major) << ";" << creditPoints << ";";
+}
+
+const std::map<unsigned char, std::string>& Course::getMajorById()
+{
     return Course::majorById; // Explicitly qualify the static member
 }
 
