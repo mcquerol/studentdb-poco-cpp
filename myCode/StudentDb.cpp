@@ -33,5 +33,39 @@ void StudentDb::setStudent(Student student)
 {
 	// add an entry to the students map: matrtikelnumber and the student object
 	students.emplace(student.getMatrikelNumber(), student);
+}
 
+void StudentDb::write(std::ostream &out) const
+{
+	//used for running count of enrollment vector size
+	size_t enrollmentsSize;
+	for(const auto& student: students)
+	{
+		enrollmentsSize+= student.second.getEnrollments().size();
+	}
+
+	//output the course count and courses info
+	out << courses.size() << "\n";
+	for(const auto& course: courses)
+	{
+		course.second->write(out);
+	}
+	//output the student count and student info
+	out << students.size() << "\n";
+	for(const auto& student: students)
+	{
+		student.second.write(out);
+	}
+	//output the enrollment count and enrollment info
+	out << enrollmentsSize << "\n";
+	for(const auto& student: students)
+	{
+		auto& matrikelNumber = student.second.getMatrikelNumber();
+		auto& enrollments = student.second.getEnrollments();
+		for(const auto& enrollment: enrollments)
+		{
+			out << matrikelNumber << ';';
+			enrollment.write(out);
+		}
+	}
 }
