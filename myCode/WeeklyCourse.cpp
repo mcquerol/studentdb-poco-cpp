@@ -47,6 +47,7 @@ void WeeklyCourse::setStartTime(const Poco::Data::Time &startTime)
 
 void WeeklyCourse::write(std::ostream &out) const
 {
+	out << 'W;';
 	write(out);
-	out << 'W;' << dayOfWeek << ";" << startTime << ";" << endTime << "\n";
+	out << dayOfWeek << ";" << startTime << ";" << endTime << "\n";
 }
