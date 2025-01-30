@@ -23,6 +23,8 @@ public:
 	unsigned short getPostalCode() const;
 	const std::string& getStreet() const;
 
+	void write(std::ostream& out) const; //write attributes to os stream
+
 };
 
 #endif
