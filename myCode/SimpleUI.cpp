@@ -28,7 +28,7 @@ Poco::Data::Date SimpleUI::getValidatedDate(const std::string& prompt)
         }
         catch (const Poco::InvalidArgumentException& ex)
         {
-            cerr << "Invalid date. Please try again in the format DD MM YYYY." << std::endl;
+            cerr << "Invalid date. Please try again in the format DD MM YYYY." << endl;
 
             cin.clear(); // Clear input errors
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
@@ -59,7 +59,7 @@ Poco::Data::Time SimpleUI::getValidatedTime(const std::string& prompt)
         }
         catch (const Poco::InvalidArgumentException& ex)
         {
-            cerr << "Invalid time. Please try again in the format HH MM SS." << std::endl;
+            cerr << "Invalid time. Please try again in the format HH MM SS." << endl;
 
             cin.clear(); // Clear input errors
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
@@ -80,7 +80,7 @@ Poco::DateTime::DaysOfWeek SimpleUI::getValidatedDayOfWeek(const std::string& pr
 		{
 			cin.clear();
 			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			cerr << "Invalid input. Please enter a number between 0 and 6." << std::endl;
+			cerr << "Invalid input. Please enter a number between 0 and 6." << endl;
 		}
 		else
 		{
@@ -101,7 +101,7 @@ unsigned int SimpleUI::getValidatedUnsignedInt(const std::string& prompt, unsign
         if (cin.fail() || value < min || value > max) {
             cin.clear(); // Clear the error flag
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-            cerr << "Invalid input. Please enter a number between " << min << " and " << max << "." << std::endl;
+            cerr << "Invalid input. Please enter a number between " << min << " and " << max << "." << endl;
         }
         else
         {
@@ -124,7 +124,7 @@ float SimpleUI::getValidatedFloat(const std::string& prompt, float min, float ma
         {
             cin.clear();
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            cerr << "Invalid input. Please enter a number between " << min << " and " << max << "." << std::endl;
+            cerr << "Invalid input. Please enter a number between " << min << " and " << max << "." << endl;
         }
         else
         {
@@ -150,12 +150,12 @@ std::string SimpleUI::getValidatedString(const std::string& prompt, bool allowNu
         std::getline(cin, input);
 
         if (input.empty()) {
-            cerr << "Input cannot be empty. Please try again." << std::endl;
+            cerr << "Input cannot be empty. Please try again." << endl;
             continue;
         }
 
         if (!allowNumbers && input.find_first_of("0123456789") != std::string::npos) {
-            cerr << "Invalid input. Numbers are not allowed." << std::endl;
+            cerr << "Invalid input. Numbers are not allowed." << endl;
             continue;
         }
 
@@ -229,7 +229,7 @@ void SimpleUI::run()
 		cout << "7. Update student" << endl;
 		cout << "or type 0 to terminate" << endl;
 
-		cin >> choice;
+		choice = getValidatedUnsignedInt("Enter choice: ", 0, 7);
 
 		switch(choice)
 		{
