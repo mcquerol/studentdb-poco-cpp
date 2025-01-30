@@ -1,4 +1,5 @@
 #include "StudentDb.h"
+#include <ostream>
 
 StudentDb::StudentDb()
 {
@@ -59,7 +60,7 @@ void StudentDb::write(std::ostream &out) const
 	out << enrollmentsSize << "\n";
 	for(const auto& student: students)
 	{
-		auto& matrikelNumber = student.second.getMatrikelNumber();
+		unsigned int matrikelNumber = student.second.getMatrikelNumber();
 		auto& enrollments = student.second.getEnrollments();
 		for(const auto& enrollment: enrollments)
 		{
@@ -67,4 +68,10 @@ void StudentDb::write(std::ostream &out) const
 			enrollment.write(out);
 		}
 	}
+}
+
+void StudentDb::read(std::istream &in)
+{
+	students.clear();
+	courses.clear();
 }
