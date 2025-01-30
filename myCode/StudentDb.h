@@ -28,7 +28,7 @@ public:
 	void setStudent(Student student);
 
 	void write(std::ostream& out) const; //write attributes to ostream
-	void read(std::istream& in) const; //read data to instream
+	void read(std::istream& in); //read data to instream
 };
 
 #endif
