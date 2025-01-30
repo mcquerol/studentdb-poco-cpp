@@ -69,4 +69,3 @@ const std::map<unsigned char, std::string>& Course::getMajorById()
 {
     return Course::majorById; // Explicitly qualify the static member
 }
-
