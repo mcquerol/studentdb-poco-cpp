@@ -43,7 +43,6 @@ void StudentDb::write(std::ostream &out) const
 	{
 		enrollmentsSize+= student.second.getEnrollments().size();
 	}
-
 	//output the course count and courses info
 	out << courses.size() << "\n";
 	for(const auto& course: courses)
