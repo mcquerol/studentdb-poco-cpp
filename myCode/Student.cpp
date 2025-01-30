@@ -75,3 +75,10 @@ void Student::setEnrollment(float grade, std::string semester, Course *course)
 void Student::removeEnrollment(size_t index) {
     enrollments.erase(enrollments.begin() + index);
 }
+
+void Student::write(std::ostream &out) const
+{
+	out << matrikelNumber << ';' << firstName << ';';
+	out << dateOfBirth.day() << '.' << dateOfBirth.month() << '.' << dateOfBirth.year() << ';';
+	out << address.write(out);
+}
