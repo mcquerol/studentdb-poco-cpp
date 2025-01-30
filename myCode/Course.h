@@ -21,6 +21,8 @@ public:
 	Course(unsigned int courseKey, std::string title, std::string major, float creditPoints);
 	virtual ~Course() = 0;
 
+	virtual void write(std::ostream& out) const; //write base attributes to os stream
+
 	unsigned int getCourseKey() const;
 	float getCreditPoints() const;
 	const std::string& getMajor() const;
