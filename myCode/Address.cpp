@@ -32,3 +32,8 @@ const std::string& Address::getStreet() const
 {
 	return street;
 }
+
+void Address::write(std::ostream &out) const
+{
+	out << street << ';' << postalCode << ';' << cityName << ';' << additionalInfo << "\n";
+}
