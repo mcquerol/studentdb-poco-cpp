@@ -41,6 +41,8 @@ public:
 	void setDateOfBirth(const Poco::Data::Date &dateOfBirth);
 	void setFirstName(const std::string &firstName);
 	void setLastName(const std::string &lastName);
+
+	void write(std::ostream& out) const; //write attributes to os stream
 };
 
 #endif
