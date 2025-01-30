@@ -28,6 +28,8 @@ public:
 	void setEndTime(const Poco::Data::Time &endTime);
 	void setStartTime(const Poco::Data::Time &startTime);
 
+	void write(std::ostream& out) const; //write attributes to os stream
+
 };
 
 #endif
