@@ -31,3 +31,8 @@ const Course& Enrollment::getCourse() const
 {
 	return *course;
 }
+
+void Enrollment::write(std::ostream &out) const
+{
+	out << course->getCourseKey() << ';' << semester << ';' << grade << "\n";
+}
