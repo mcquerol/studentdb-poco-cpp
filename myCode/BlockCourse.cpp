@@ -1,4 +1,5 @@
 #include "BlockCourse.h"
+#include <ostream>
 
 BlockCourse::BlockCourse(unsigned int courseKey, std::string title, std::string major, float creditPoints)
 : Course(courseKey,title,major,creditPoints) {}
@@ -51,5 +52,7 @@ void BlockCourse::write(std::ostream &out) const
 {
 	out << "B;";
 	write(out);
-	out << startDate << ';' << endDate << ';' << startTime << ';' << endTime << "\n";
+	out << startDate.day() << '.' << startDate.month() << '.' << startDate.year() << ';';
+	out << endDate.day() << '.' << endDate.month() << '.' << endDate.year() << ';';
+	out << startTime.second() << '.' << startTime.minute() << '.' << startTime.hour() << "\n";
 }
