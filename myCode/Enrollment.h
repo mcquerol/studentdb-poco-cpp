@@ -24,8 +24,7 @@ public:
 	const std::string& getSemester() const;
 	const Course& getCourse() const;
 
-
+	void write(std::ostream& out) const; //write attributes to os stream
 };
-
 
 #endif
