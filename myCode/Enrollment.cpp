@@ -1,5 +1,5 @@
 #include "Enrollment.h"
-
+#include <ostream>
 
 Enrollment::Enrollment(float grade, std::string semester, Course *course)
 {

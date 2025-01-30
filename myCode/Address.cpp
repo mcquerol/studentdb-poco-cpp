@@ -1,4 +1,5 @@
 #include "Address.h"
+#include <ostream>
 
 Address::Address(std::string street, unsigned short postalCode, std::string cityName, std::string additionalInfo)
 {

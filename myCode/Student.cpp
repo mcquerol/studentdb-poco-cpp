@@ -1,7 +1,7 @@
 #include "Student.h"
+#include <ostream>
 
 unsigned int Student::nextMatrikelNumber = 100000;
-
 
 Student::Student(std::string firstName, std::string lastName, Poco::Data::Date dateOfBirth, std::string street, unsigned short postalCode, std::string cityName, std::string additionalInfo)
 : address(street, postalCode, cityName, additionalInfo)
@@ -80,5 +80,5 @@ void Student::write(std::ostream &out) const
 {
 	out << matrikelNumber << ';' << firstName << ';';
 	out << dateOfBirth.day() << '.' << dateOfBirth.month() << '.' << dateOfBirth.year() << ';';
-	out << address.write(out);
+	address.write(out);
 }
