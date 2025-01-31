@@ -73,10 +73,9 @@ void StudentDb::write(std::ostream &out) const
 void StudentDb::read(std::istream &in)
 {
 	courses.clear();
-	for(const auto& student: students)
+	for(auto& student: students)
 	{
-		auto& enrollments = student.second.getEnrollments();
-		enrollments.clear(); //find a way to fix this
+		student.second.getEnrollments().clear(); //find a way to fix this
 	}
 	students.clear();
 }
