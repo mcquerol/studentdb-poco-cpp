@@ -75,7 +75,10 @@ void StudentDb::read(std::istream &in)
 	courses.clear();
 	for(auto& student: students)
 	{
-		student.second.getEnrollments().clear(); //find a way to fix this
+		student.second.clearEnrollments();
 	}
 	students.clear();
+
+	size_t courseCount, studentCount, enrollmentCount;
+
 }
