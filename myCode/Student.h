@@ -33,9 +33,10 @@ public:
 	unsigned int getMatrikelNumber() const;
 
 	const std::vector<Enrollment>& getEnrollments() const;
-	std::vector<Enrollment>& getEnrollments();
+
 	void setEnrollment(float grade, std::string semester, Course *course);
 	void removeEnrollment(size_t index);
+	void clearEnrollments();
 
 	void setAddress(const Address &address);
 	void setDateOfBirth(const Poco::Data::Date &dateOfBirth);

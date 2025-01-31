@@ -61,11 +61,6 @@ const std::vector<Enrollment>& Student::getEnrollments() const
 	return enrollments;
 }
 
-std::vector<Enrollment>& Student::getEnrollments()
-{
-	return enrollments;
-}
-
 void Student::setEnrollment(float grade, std::string semester, Course *course)
 {
 	enrollments.emplace_back(grade, semester, course);
@@ -73,6 +68,11 @@ void Student::setEnrollment(float grade, std::string semester, Course *course)
 
 void Student::removeEnrollment(size_t index) {
     enrollments.erase(enrollments.begin() + index);
+}
+
+void Student::clearEnrollments()
+{
+	enrollments.clear();
 }
 
 void Student::write(std::ostream &out) const
