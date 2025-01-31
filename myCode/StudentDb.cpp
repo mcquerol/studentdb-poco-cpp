@@ -1,5 +1,11 @@
 #include "StudentDb.h"
-#include <ostream>
+#include <iostream>
+#include <string>
+#include <sstream>
+#include "WeeklyCourse.h"
+#include "BlockCourse.h"
+
+using namespace std;
 
 StudentDb::StudentDb()
 {
@@ -80,5 +86,66 @@ void StudentDb::read(std::istream &in)
 	students.clear();
 
 	size_t courseCount, studentCount, enrollmentCount;
+	in >> courseCount;
+	in.ignore();
+	string line;
+	for(size_t i = 0; i < courseCount; i++)
+	{
+		char courseType;
+		unsigned int courseKey;
+		string title, major;
+		float creditPoints;
+		Poco::Data::Time startTime;
+		Poco::Data::Time endTime;
 
+		string temp;
+		std::getline(in, line);  // Read full line
+		istringstream iss(line);  // Create stringstream
+
+		std::getline(iss, temp, ';');
+		courseType = temp[0];  // Extract first character safely
+
+		getline(iss, temp, ';');
+		courseKey = std::stoi(temp);  // Convert string to unsigned int
+		getline(iss, title, ';');
+		getline(iss, major, ';');
+		getline(iss, temp, ';');
+		creditPoints = std::stof(temp);  // Convert string to float
+
+		if(courseType == 'W')
+		{
+			unique_ptr<WeeklyCourse> weeklyCourse = std::make_unique<WeeklyCourse>(courseKey, title, major, creditPoints);
+
+			Poco::DateTime::DaysOfWeek dayOfWeek;
+			string DayOfWeekStr;
+			string startTimeStr, endTimeStr;
+			string hour, minute, second;
+			getline(iss, DayOfWeekStr, ';');
+			dayOfWeek = static_cast<Poco::DateTime::DaysOfWeek>(stoi(DayOfWeekStr));
+
+			getline(iss, startTimeStr, ';');
+			istringstream startTimess(startTimeStr);
+			getline(startTimess, hour, '.');
+			getline(startTimess, minute, '.');
+			getline(startTimess, second, '.');
+			startTime = {stoi(hour),stoi(minute),stoi(second)};
+
+			getline(iss, endTimeStr, ';');
+			istringstream endTimess(endTimeStr);
+			getline(endTimess, hour, '.');
+			getline(endTimess, minute, '.');
+			getline(endTimess, second, '.');
+			endTime = {stoi(hour),stoi(minute),stoi(second)};
+
+			weeklyCourse->setDayOfWeek(dayOfWeek);
+			weeklyCourse->setStartTime(startTime);
+			weeklyCourse->setEndTime(endTime);
+
+			setCourse(std::move(weeklyCourse));
+		}
+		else if(courseType == 'B')
+		{
+
+		}
+	}
 }
