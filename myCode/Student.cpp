@@ -66,7 +66,6 @@ std::vector<Enrollment>& Student::getEnrollments()
 	return enrollments;
 }
 
-
 void Student::setEnrollment(float grade, std::string semester, Course *course)
 {
 	enrollments.emplace_back(grade, semester, course);
