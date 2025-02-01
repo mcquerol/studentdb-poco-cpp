@@ -44,6 +44,8 @@ public:
 	void setLastName(const std::string &lastName);
 
 	void write(std::ostream& out) const; //write attributes to os stream
+
+	static void setNextMatrikelNumber(unsigned int matrikelnumber);
 };
 
 #endif
