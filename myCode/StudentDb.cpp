@@ -237,7 +237,7 @@ void StudentDb::read(std::istream &in)
 
 		if (courses.find(courseKey) == courses.end())
 		{
-		    cerr << "Error: Course with key " << courseKey << " not found." << std::endl;
+		    cerr << "Error: Course with key " << courseKey << " not found." << endl;
 		    continue; // Skip this enrollment
 		}
 		else
@@ -245,5 +245,16 @@ void StudentDb::read(std::istream &in)
 			Course* course = const_cast<Course*>(courses.at(courseKey).get());
 			students.at(matrikelNumber).setEnrollment(grade, semesterStr, course); //add enrollment to enrollment vector of student with given matriklenumber
 		}
+	}
+	//check last matrikel number and add one to it
+	auto lastStudent = students.rbegin(); // Reverse iterator, points to last element
+	if (lastStudent != students.rend()) // Ensure map is not empty
+	{
+	    unsigned int highestMatrikel = lastStudent->first; // Extract the key
+	    Student::setNextMatrikelNumber(highestMatrikel + 1); // Update static variable
+	}
+	else
+	{
+	    Student::setNextMatrikelNumber(100000); // Default starting value if empty
 	}
 }
