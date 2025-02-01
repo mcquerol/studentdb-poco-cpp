@@ -4,6 +4,7 @@
 #include "BlockCourse.h"
 #include "Student.h"
 
+#include <fstream>
 #include <iostream>
 
 using namespace std;
@@ -227,9 +228,11 @@ void SimpleUI::run()
 		cout << "5. Print student" << endl;
 		cout << "6. Search student" << endl;
 		cout << "7. Update student" << endl;
+		cout << "8. Write student db contents to csv file" << endl;
+		cout << "9. Read csv contents to db" << endl;
 		cout << "or type 0 to terminate" << endl;
 
-		choice = getValidatedUnsignedInt("Enter choice: ", 0, 7);
+		choice = getValidatedUnsignedInt("Enter choice: ", 0, 9);
 
 		switch(choice)
 		{
@@ -240,6 +243,8 @@ void SimpleUI::run()
 			case 5 : printStudent(); break;
 			case 6 : searchStudent(); break;
 			case 7 : updateStudent(); break;
+			case 8 : writeToCsv(); break;
+			case 9 : readFromCsv(); break;
 			case 0 : cerr << "Program Terminated" << endl; return;
 			default: cerr << "Invalid choice. Please try again." << endl;
 		}
@@ -612,4 +617,36 @@ void SimpleUI::updateStudent()
 	{
 		cerr << "Student with matrikel number " << matrikelNumber << " not found!" << endl;
 	}
+}
+
+void SimpleUI::writeToCsv()
+{
+	ofstream csvFile;
+	string fileName = getValidatedString("Enter a file name: ", true);
+	csvFile.open(fileName);
+
+	if (!csvFile.is_open())
+	{
+	    cerr << "Error: Unable to open file '" << fileName << "'" << endl;
+	    return;
+	}
+
+	db->write(csvFile);
+	csvFile.close();  // Ensure file is closed properly
+}
+
+void SimpleUI::readFromCsv()
+{
+	ifstream csvFile;
+	string fileName = getValidatedString("Enter a file name: ", true);
+	csvFile.open(fileName);
+
+	if (!csvFile.is_open())
+	{
+	    cerr << "Error: Unable to open file '" << fileName << "'" << endl;
+	    return;
+	}
+
+	db->read(csvFile);
+	csvFile.close();  // Ensure file is closed properly
 }
