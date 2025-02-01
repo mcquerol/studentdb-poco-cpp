@@ -45,7 +45,7 @@ void StudentDb::setStudent(Student student)
 void StudentDb::write(std::ostream &out) const
 {
 	//used for running count of enrollment vector size
-	size_t enrollmentsSize;
+	size_t enrollmentsSize = 0;
 	for(const auto& student: students)
 	{
 		enrollmentsSize+= student.second.getEnrollments().size();
