@@ -77,12 +77,12 @@ void Student::clearEnrollments()
 
 void Student::write(std::ostream &out) const
 {
-	out << matrikelNumber << ';' << firstName << ';';
+	out << matrikelNumber << ';' << lastName << ';' << firstName << ';';
 	out << dateOfBirth.day() << '.' << dateOfBirth.month() << '.' << dateOfBirth.year() << ';';
 	address.write(out);
 }
 
-void Student::setNextMatrikelNumber(unsigned int matrikelNumber)
+void Student::setNextMatrikelNumber(unsigned int newMatrikelNumber)
 {
-	this->matrikelNumber = matrikelNumber;
+    Student::nextMatrikelNumber = newMatrikelNumber;
 }
