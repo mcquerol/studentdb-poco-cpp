@@ -92,6 +92,7 @@ void StudentDb::read(std::istream &in)
 	}
 	students.clear();
 
+
 	in >> courseCount;
 	in.ignore();
 
@@ -122,7 +123,7 @@ void StudentDb::read(std::istream &in)
 		getline(iss, temp, ';');
 		creditPoints = stof(temp);  // Convert string to float
 
-		if(courseType == 'W')
+		if (courseType == 'W')
 		{
 			unique_ptr<WeeklyCourse> weeklyCourse = std::make_unique<WeeklyCourse>(courseKey, title, major, creditPoints);
 
@@ -130,16 +131,24 @@ void StudentDb::read(std::istream &in)
 			dayOfWeek = static_cast<Poco::DateTime::DaysOfWeek>(stoi(dayOfWeekStr));
 
 			getline(iss, startTimeStr, ';');
-			getline(iss, hour, '.');
-			getline(iss, minute, '.');
-			getline(iss, second, '.');
-			startTime = Poco::Data::Time(stoi(hour), stoi(minute), stoi(second));
+			istringstream timeStreamStart(startTimeStr);
+			getline(timeStreamStart, temp, '.');
+			int startHour = stoi(temp);
+			getline(timeStreamStart, temp, '.');
+			int startMinute = stoi(temp);
+			getline(timeStreamStart, temp, '.');
+			int startSecond = stoi(temp);
+			startTime = Poco::Data::Time(startHour, startMinute, startSecond);
 
 			getline(iss, endTimeStr, ';');
-			getline(iss, hour, '.');
-			getline(iss, minute, '.');
-			getline(iss, second, '.');
-			endTime = Poco::Data::Time(stoi(hour), stoi(minute), stoi(second));
+			istringstream timeStreamEnd(endTimeStr);
+			getline(timeStreamEnd, temp, '.');
+			int endHour = stoi(temp);
+			getline(timeStreamEnd, temp, '.');
+			int endMinute = stoi(temp);
+			getline(timeStreamEnd, temp, '.');
+			int endSecond = stoi(temp);
+			endTime = Poco::Data::Time(endHour, endMinute, endSecond);
 
 			weeklyCourse->setDayOfWeek(dayOfWeek);
 			weeklyCourse->setStartTime(startTime);
@@ -147,33 +156,43 @@ void StudentDb::read(std::istream &in)
 
 			setCourse(std::move(weeklyCourse));
 		}
-		else if(courseType == 'B')
+		else if (courseType == 'B')
 		{
 			std::unique_ptr<BlockCourse> blockCourse = std::make_unique<BlockCourse>(courseKey, title, major, creditPoints);
 
 			getline(iss, startDateStr, ';');
-			getline(iss, day, '.');
-			getline(iss, month, '.');
-			getline(iss, year, '.');
+			istringstream dateStreamStart(startDateStr);
+			getline(dateStreamStart, day, '.');
+			getline(dateStreamStart, month, '.');
+			getline(dateStreamStart, year, '.');
 			startDate = Poco::Data::Date(stoi(year), stoi(month), stoi(day));
 
 			getline(iss, endDateStr, ';');
-			getline(iss, day, '.');
-			getline(iss, month, '.');
-			getline(iss, year, '.');
+			istringstream dateStreamEnd(endDateStr);
+			getline(dateStreamEnd, day, '.');
+			getline(dateStreamEnd, month, '.');
+			getline(dateStreamEnd, year, '.');
 			endDate = Poco::Data::Date(stoi(year), stoi(month), stoi(day));
 
 			getline(iss, startTimeStr, ';');
-			getline(iss, hour, '.');
-			getline(iss, minute, '.');
-			getline(iss, second, '.');
-			startTime = Poco::Data::Time(stoi(hour), stoi(minute), stoi(second));
+			istringstream timeStreamStart(startTimeStr);
+			getline(timeStreamStart, temp, '.');
+			int startHour = stoi(temp);
+			getline(timeStreamStart, temp, '.');
+			int startMinute = stoi(temp);
+			getline(timeStreamStart, temp, '.');
+			int startSecond = stoi(temp);
+			startTime = Poco::Data::Time(startHour, startMinute, startSecond);
 
 			getline(iss, endTimeStr, ';');
-			getline(iss, hour, '.');
-			getline(iss, minute, '.');
-			getline(iss, second, '.');
-			endTime = Poco::Data::Time(stoi(hour), stoi(minute), stoi(second));
+			istringstream timeStreamEnd(endTimeStr);
+			getline(timeStreamEnd, temp, '.');
+			int endHour = stoi(temp);
+			getline(timeStreamEnd, temp, '.');
+			int endMinute = stoi(temp);
+			getline(timeStreamEnd, temp, '.');
+			int endSecond = stoi(temp);
+			endTime = Poco::Data::Time(endHour, endMinute, endSecond);
 
 			blockCourse->setStartDate(startDate);
 			blockCourse->setEndDate(endDate);
@@ -202,9 +221,10 @@ void StudentDb::read(std::istream &in)
 		getline(iss, firstNameStr, ';');
 
 		getline(iss, dateOfBirthStr, ';');
-		getline(iss, day, '.');
-		getline(iss, month, '.');
-		getline(iss, year, '.');
+		istringstream dateStreamStart(dateOfBirthStr);
+		getline(dateStreamStart, day, '.');
+		getline(dateStreamStart, month, '.');
+		getline(dateStreamStart, year, '.');
 		dateOfBirth = Poco::Data::Date(stoi(year), stoi(month), stoi(day));
 
 		getline(iss, streetStr, ';');
