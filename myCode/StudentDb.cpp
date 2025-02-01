@@ -78,6 +78,11 @@ void StudentDb::write(std::ostream &out) const
 
 void StudentDb::read(std::istream &in)
 {
+	string dayOfWeekStr;
+	string startTimeStr, endTimeStr, startDateStr, endDateStr;
+	string hourStr, minuteStr, secondStr, yearStr, monthStr, dayStr;
+	size_t courseCount, studentCount, enrollmentCount;
+
 	courses.clear();
 	for(auto& student: students)
 	{
@@ -85,7 +90,6 @@ void StudentDb::read(std::istream &in)
 	}
 	students.clear();
 
-	size_t courseCount, studentCount, enrollmentCount;
 	in >> courseCount;
 	in.ignore();
 	string line;
@@ -97,6 +101,8 @@ void StudentDb::read(std::istream &in)
 		float creditPoints;
 		Poco::Data::Time startTime;
 		Poco::Data::Time endTime;
+		Poco::Data::Date startDate;
+		Poco::Data::Date endDate;
 
 		string temp;
 		std::getline(in, line);  // Read full line
@@ -117,25 +123,22 @@ void StudentDb::read(std::istream &in)
 			unique_ptr<WeeklyCourse> weeklyCourse = std::make_unique<WeeklyCourse>(courseKey, title, major, creditPoints);
 
 			Poco::DateTime::DaysOfWeek dayOfWeek;
-			string DayOfWeekStr;
-			string startTimeStr, endTimeStr;
-			string hour, minute, second;
-			getline(iss, DayOfWeekStr, ';');
-			dayOfWeek = static_cast<Poco::DateTime::DaysOfWeek>(stoi(DayOfWeekStr));
+			getline(iss, dayOfWeekStr, ';');
+			dayOfWeek = static_cast<Poco::DateTime::DaysOfWeek>(stoi(dayOfWeekStr));
 
 			getline(iss, startTimeStr, ';');
-			istringstream startTimess(startTimeStr);
-			getline(startTimess, hour, '.');
-			getline(startTimess, minute, '.');
-			getline(startTimess, second, '.');
-			startTime = {stoi(hour),stoi(minute),stoi(second)};
+			istringstream startTimeSs(startTimeStr);
+			getline(startTimeSs, hourStr, '.');
+			getline(startTimeSs, minuteStr, '.');
+			getline(startTimeSs, secondStr, '.');
+			startTime = {stoi(hourStr),stoi(minuteStr),stoi(secondStr)};
 
 			getline(iss, endTimeStr, ';');
-			istringstream endTimess(endTimeStr);
-			getline(endTimess, hour, '.');
-			getline(endTimess, minute, '.');
-			getline(endTimess, second, '.');
-			endTime = {stoi(hour),stoi(minute),stoi(second)};
+			istringstream endTimeSs(endTimeStr);
+			getline(endTimeSs, hourStr, '.');
+			getline(endTimeSs, minuteStr, '.');
+			getline(endTimeSs, secondStr, '.');
+			endTime = {stoi(hourStr),stoi(minuteStr),stoi(secondStr)};
 
 			weeklyCourse->setDayOfWeek(dayOfWeek);
 			weeklyCourse->setStartTime(startTime);
@@ -145,7 +148,42 @@ void StudentDb::read(std::istream &in)
 		}
 		else if(courseType == 'B')
 		{
+			std::unique_ptr<BlockCourse> blockCourse = std::make_unique<BlockCourse>(courseKey, title, major, creditPoints);
 
+			getline(iss, startDateStr, ';');
+			istringstream startDateSs(startDateStr);
+			getline(startDateSs, dayStr, '.');
+			getline(startDateSs, monthStr, '.');
+			getline(startDateSs, yearStr, '.');
+			startDate = {stoi(yearStr), stoi(monthStr), stoi(dayStr)};
+
+			getline(iss, endDateStr, ';');
+			istringstream endDateSs(endDateStr);
+			getline(endDateSs, dayStr, '.');
+			getline(endDateSs, monthStr, '.');
+			getline(endDateSs, yearStr, '.');
+			endDate = {stoi(yearStr), stoi(monthStr), stoi(dayStr)};
+
+			getline(iss, startTimeStr, ';');
+			istringstream startTimeSs(startTimeStr);
+			getline(startTimeSs, hourStr, '.');
+			getline(startTimeSs, minuteStr, '.');
+			getline(startTimeSs, secondStr, '.');
+			startTime = {stoi(hourStr), stoi(minuteStr), stoi(secondStr)};
+
+			getline(iss, endTimeStr, ';');
+			istringstream endTimeSs(endTimeStr);
+			getline(endTimeSs, hourStr, '.');
+			getline(endTimeSs, minuteStr, '.');
+			getline(endTimeSs, secondStr, '.');
+			endTime = {stoi(hourStr), stoi(minuteStr), stoi(secondStr)};
+
+			blockCourse->setStartDate(startDate);
+			blockCourse->setEndDate(endDate);
+			blockCourse->setStartTime(startTime);
+			blockCourse->setEndTime(endTime);
+
+			setCourse(std::move(blockCourse));
 		}
 	}
 }
