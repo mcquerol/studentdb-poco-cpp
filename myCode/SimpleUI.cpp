@@ -527,7 +527,7 @@ void SimpleUI::updateStudent()
 	if (db->getStudents().find(matrikelNumber) != db->getStudents().end())
 	{
 		auto& student = db->getStudents().at(matrikelNumber);
-		auto& enrollments = student.getEnrollments();
+		auto& enrollments = const_cast<vector<Enrollment>&>(db->getStudents().at(matrikelNumber).getEnrollments());
 
 		do
 		{
