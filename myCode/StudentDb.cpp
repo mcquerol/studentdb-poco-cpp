@@ -112,7 +112,7 @@ void StudentDb::read(std::istream &in)
 		courseType = courseLine[0];  // Extract first character safely
 
 		getline(courseSs, courseLine, ';');
-		courseKey = stoi(courseLine);  // Convert string to unsigned int
+		courseKey = static_cast<unsigned int>(stoi(courseLine));  // Convert string to unsigned int
 		getline(courseSs, title, ';');
 		getline(courseSs, major, ';');
 		getline(courseSs, courseLine, ';');
@@ -186,6 +186,7 @@ void StudentDb::read(std::istream &in)
 			setCourse(std::move(blockCourse));
 		}
 	}
+
 	in >> studentCount;
 	in.ignore();
 	for(size_t i = 0; i < studentCount; i++)
@@ -220,6 +221,29 @@ void StudentDb::read(std::istream &in)
 
 		Student student(firstNameStr, lastNameStr, dateOfBirth, streetStr, postalCode, cityNameStr, additionalInfoStr);
 		setStudent(student);
+	}
 
+	in >> enrollmentCount;
+	in.ignore();
+	for(size_t i = 0; i < enrollmentCount; i++)
+	{
+		unsigned int matrikelNumber, courseKey;
+		string semesterStr;
+		float grade;
+
+		string EnrollmentLine;
+		getline(in, line);  // Read full line
+		istringstream studentSs(line);  // Create stringstream
+
+		getline(studentSs, EnrollmentLine, ';');
+		matrikelNumber = static_cast<unsigned int>(stoi(EnrollmentLine));  // Convert string to unsigned int
+		getline(studentSs, EnrollmentLine, ';');
+		courseKey = static_cast<unsigned int>(stoi(EnrollmentLine));  // Convert string to unsigned int
+		getline(studentSs, semesterStr, ';');
+		getline(studentSs, EnrollmentLine, ';');
+		grade = static_cast<unsigned int>(stof(EnrollmentLine));  // Convert string to unsigned int
+
+		Course* course = const_cast<Course*>(courses.at(courseKey).get()); // Get the raw Course pointer of the corresponding course
+		students.at(matrikelNumber).setEnrollment(grade, semesterStr, course); //add enrollment to enrollment vector of student with given matriklenumber
 	}
 }
