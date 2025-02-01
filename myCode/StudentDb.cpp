@@ -237,7 +237,7 @@ void StudentDb::read(std::istream &in)
 
 		if (courses.find(courseKey) == courses.end())
 		{
-		    std::cerr << "Error: Course with key " << courseKey << " not found." << std::endl;
+		    cerr << "Error: Course with key " << courseKey << " not found." << std::endl;
 		    continue; // Skip this enrollment
 		}
 		else
