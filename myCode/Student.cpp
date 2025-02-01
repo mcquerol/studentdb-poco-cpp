@@ -81,3 +81,8 @@ void Student::write(std::ostream &out) const
 	out << dateOfBirth.day() << '.' << dateOfBirth.month() << '.' << dateOfBirth.year() << ';';
 	address.write(out);
 }
+
+void Student::setNextMatrikelNumber(unsigned int matrikelNumber)
+{
+	this->matrikelNumber = matrikelNumber;
+}
