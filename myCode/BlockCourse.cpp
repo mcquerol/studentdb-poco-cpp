@@ -51,7 +51,7 @@ void BlockCourse::setEndDate(const Poco::Data::Date &endDate)
 void BlockCourse::write(std::ostream &out) const
 {
 	out << "B;";
-	write(out);
+	Course::write(out);
 	out << startDate.day() << '.' << startDate.month() << '.' << startDate.year() << ';';
 	out << endDate.day() << '.' << endDate.month() << '.' << endDate.year() << ';';
 	out << startTime.hour() << '.' << startTime.minute() << '.' << startTime.second();
