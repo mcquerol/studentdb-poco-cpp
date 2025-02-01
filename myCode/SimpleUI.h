@@ -34,6 +34,8 @@ public:
 	void searchStudent();
 	void updateStudent();
 
+	void writeToCsv();
+	void readFromCsv();
 };
 
 #endif
