@@ -45,7 +45,7 @@ public:
 
 	void write(std::ostream& out) const; //write attributes to os stream
 
-	static void setNextMatrikelNumber(unsigned int matrikelnumber);
+	static void setNextMatrikelNumber(unsigned int newMatrikelNumber);
 };
 
 #endif
