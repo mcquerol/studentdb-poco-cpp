@@ -104,36 +104,36 @@ void StudentDb::read(std::istream &in)
 		Poco::Data::Date startDate;
 		Poco::Data::Date endDate;
 
-		string temp;
-		std::getline(in, line);  // Read full line
-		istringstream iss(line);  // Create stringstream
+		string courseLine;
+		getline(in, line);  // Read full line
+		istringstream courseSs(line);  // Create stringstream
 
-		std::getline(iss, temp, ';');
-		courseType = temp[0];  // Extract first character safely
+		getline(courseSs, courseLine, ';');
+		courseType = courseLine[0];  // Extract first character safely
 
-		getline(iss, temp, ';');
-		courseKey = std::stoi(temp);  // Convert string to unsigned int
-		getline(iss, title, ';');
-		getline(iss, major, ';');
-		getline(iss, temp, ';');
-		creditPoints = std::stof(temp);  // Convert string to float
+		getline(courseSs, courseLine, ';');
+		courseKey = stoi(courseLine);  // Convert string to unsigned int
+		getline(courseSs, title, ';');
+		getline(courseSs, major, ';');
+		getline(courseSs, courseLine, ';');
+		creditPoints = stof(courseLine);  // Convert string to float
 
 		if(courseType == 'W')
 		{
 			unique_ptr<WeeklyCourse> weeklyCourse = std::make_unique<WeeklyCourse>(courseKey, title, major, creditPoints);
 
 			Poco::DateTime::DaysOfWeek dayOfWeek;
-			getline(iss, dayOfWeekStr, ';');
+			getline(courseSs, dayOfWeekStr, ';');
 			dayOfWeek = static_cast<Poco::DateTime::DaysOfWeek>(stoi(dayOfWeekStr));
 
-			getline(iss, startTimeStr, ';');
+			getline(courseSs, startTimeStr, ';');
 			istringstream startTimeSs(startTimeStr);
 			getline(startTimeSs, hourStr, '.');
 			getline(startTimeSs, minuteStr, '.');
 			getline(startTimeSs, secondStr, '.');
 			startTime = {stoi(hourStr),stoi(minuteStr),stoi(secondStr)};
 
-			getline(iss, endTimeStr, ';');
+			getline(courseSs, endTimeStr, ';');
 			istringstream endTimeSs(endTimeStr);
 			getline(endTimeSs, hourStr, '.');
 			getline(endTimeSs, minuteStr, '.');
@@ -150,28 +150,28 @@ void StudentDb::read(std::istream &in)
 		{
 			std::unique_ptr<BlockCourse> blockCourse = std::make_unique<BlockCourse>(courseKey, title, major, creditPoints);
 
-			getline(iss, startDateStr, ';');
+			getline(courseSs, startDateStr, ';');
 			istringstream startDateSs(startDateStr);
 			getline(startDateSs, dayStr, '.');
 			getline(startDateSs, monthStr, '.');
 			getline(startDateSs, yearStr, '.');
 			startDate = {stoi(yearStr), stoi(monthStr), stoi(dayStr)};
 
-			getline(iss, endDateStr, ';');
+			getline(courseSs, endDateStr, ';');
 			istringstream endDateSs(endDateStr);
 			getline(endDateSs, dayStr, '.');
 			getline(endDateSs, monthStr, '.');
 			getline(endDateSs, yearStr, '.');
 			endDate = {stoi(yearStr), stoi(monthStr), stoi(dayStr)};
 
-			getline(iss, startTimeStr, ';');
+			getline(courseSs, startTimeStr, ';');
 			istringstream startTimeSs(startTimeStr);
 			getline(startTimeSs, hourStr, '.');
 			getline(startTimeSs, minuteStr, '.');
 			getline(startTimeSs, secondStr, '.');
 			startTime = {stoi(hourStr), stoi(minuteStr), stoi(secondStr)};
 
-			getline(iss, endTimeStr, ';');
+			getline(courseSs, endTimeStr, ';');
 			istringstream endTimeSs(endTimeStr);
 			getline(endTimeSs, hourStr, '.');
 			getline(endTimeSs, minuteStr, '.');
@@ -185,5 +185,41 @@ void StudentDb::read(std::istream &in)
 
 			setCourse(std::move(blockCourse));
 		}
+	}
+	in >> studentCount;
+	in.ignore();
+	for(size_t i = 0; i < studentCount; i++)
+	{
+		unsigned int matrikelNumber;
+		string firstNameStr, lastNameStr, dateOfBirthStr;
+		Poco::Data::Date dateOfBirth;
+		string streetStr, cityNameStr, additionalInfoStr;
+		unsigned short postalCode;
+
+		string studentLine;
+		getline(in, line);  // Read full line
+		istringstream studentSs(line);  // Create stringstream
+
+		getline(studentSs, studentLine, ';');
+		matrikelNumber = static_cast<unsigned int>(stoi(studentLine));  // Convert string to unsigned int
+		getline(studentSs, lastNameStr, ';');
+		getline(studentSs, firstNameStr, ';');
+
+		getline(studentSs, dateOfBirthStr, ';');
+		istringstream dateOfBirthSs(dateOfBirthStr);
+		getline(dateOfBirthSs, dayStr, '.');
+		getline(dateOfBirthSs, monthStr, '.');
+		getline(dateOfBirthSs, yearStr, '.');
+		dateOfBirth = {stoi(yearStr), stoi(monthStr), stoi(dayStr)};
+
+		getline(studentSs, streetStr, ';');
+		getline(studentSs, studentLine, ';');
+		postalCode = static_cast<unsigned short>(stoi(studentLine));  // Convert string to unsigned short
+		getline(studentSs, cityNameStr, ';');
+		getline(studentSs, additionalInfoStr, ';');
+
+		Student student(firstNameStr, lastNameStr, dateOfBirth, streetStr, postalCode, cityNameStr, additionalInfoStr);
+		setStudent(student);
+
 	}
 }
