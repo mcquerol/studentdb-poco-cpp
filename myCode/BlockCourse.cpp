@@ -54,5 +54,6 @@ void BlockCourse::write(std::ostream &out) const
 	write(out);
 	out << startDate.day() << '.' << startDate.month() << '.' << startDate.year() << ';';
 	out << endDate.day() << '.' << endDate.month() << '.' << endDate.year() << ';';
-	out << startTime.second() << '.' << startTime.minute() << '.' << startTime.hour() << "\n";
+	out << startTime.hour() << '.' << startTime.minute() << '.' << startTime.second();
+	out << endTime.hour() << '.' << endTime.minute() << '.' << endTime.second()<< "\n";
 }
