@@ -44,6 +44,10 @@ void Address::write(std::ostream &out) const
 	out << street << ';' << postalCode << ';' << cityName << ';' << additionalInfo << "\n";
 }
 
+Address::Address()
+{
+}
+
 void Address::read(std::istream &in)
 {
 	string line, temp;

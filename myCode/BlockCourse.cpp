@@ -6,6 +6,10 @@
 
 using namespace std;
 
+BlockCourse::BlockCourse()
+{
+}
+
 BlockCourse::BlockCourse(unsigned int courseKey, std::string title, std::string major, float creditPoints)
 : Course(courseKey,title,major,creditPoints) {}
 

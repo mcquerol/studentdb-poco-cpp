@@ -6,6 +6,8 @@
 
 using namespace std;
 
+Enrollment::Enrollment() : grade(0), course(nullptr) {}
+
 Enrollment::Enrollment(float grade, std::string semester, Course *course)
 {
 	this->grade = grade;
@@ -51,5 +53,4 @@ void Enrollment::read(std::istream &in)
 	getline(iss, semester, ';');
 	getline(iss, temp, ';');
 	grade = (stof(temp));  // Convert string to unsigned int
-
 }

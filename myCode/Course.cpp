@@ -14,6 +14,10 @@ std::map<unsigned char, std::string> Course::majorById =
 	{'P', "Power"},
 };
 
+Course::Course()
+{
+}
+
 Course::Course(unsigned int courseKey, std::string title, std::string major, float creditPoints)
 {
 	this->courseKey = courseKey;
@@ -50,7 +54,7 @@ float Course::getCreditPoints() const
 
 const std::string& Course::getMajor() const
 {
-    auto it = majorById.find(major);
+    auto it = majorById.find(this->major);
     if (it != majorById.end())
     {
         return it->second; // Return the string representation
@@ -80,10 +84,10 @@ void Course::read(std::istream &in)
 	getline(in, line);  // Read full line
 	istringstream iss(line);  // Create stringstream
 	getline(iss, temp, ';');
-	courseKey = static_cast<unsigned int>(stoi(temp));  // Convert string to unsigned int
-	getline(iss, title, ';');
-	std::string majorStr;
+	this->courseKey = static_cast<unsigned int>(stoi(temp));  // Convert string to unsigned int
+	getline(iss, this->title, ';');
+	string majorStr;
 	getline(iss, majorStr, ';');  // Read as a string
-	major = majorStr[0];//access first character
+	this->major = majorStr[0];//access first character
 	creditPoints = stof(temp);  // Convert string to float
 }

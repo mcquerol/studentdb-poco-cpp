@@ -87,6 +87,10 @@ void Student::write(std::ostream &out) const
 	address.write(out);
 }
 
+Student::Student()
+{
+}
+
 void Student::setNextMatrikelNumber(unsigned int newMatrikelNumber)
 {
     Student::nextMatrikelNumber = newMatrikelNumber;

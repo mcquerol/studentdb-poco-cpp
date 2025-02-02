@@ -6,6 +6,10 @@
 
 using namespace std;
 
+WeeklyCourse::WeeklyCourse()
+{
+}
+
 WeeklyCourse::WeeklyCourse(unsigned int courseKey, std::string title, std::string major, float creditPoints)
 : Course(courseKey,title,major,creditPoints)
 {
