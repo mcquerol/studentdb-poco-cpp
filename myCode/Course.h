@@ -18,6 +18,7 @@ protected:
 
 public:
 
+	Course();
 	Course(unsigned int courseKey, std::string title, std::string major, float creditPoints);
 	virtual ~Course() = 0;
 
@@ -33,6 +34,5 @@ public:
 	static const std::map<unsigned char, std::string>& getMajorById();
 	
 };
-
 
 #endif

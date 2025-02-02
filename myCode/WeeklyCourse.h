@@ -17,6 +17,7 @@ private:
 
 public:
 
+	WeeklyCourse();
 	WeeklyCourse(unsigned int courseKey, std::string title, std::string major, float creditPoints);
 	~WeeklyCourse();
 

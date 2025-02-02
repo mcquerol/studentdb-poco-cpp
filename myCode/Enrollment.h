@@ -16,6 +16,7 @@ private:
 
 public:
 
+	Enrollment();
 	Enrollment(float grade, std::string semester, Course* course);
 	~Enrollment();
 

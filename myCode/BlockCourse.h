@@ -18,6 +18,7 @@ private:
 
 public:
 
+	BlockCourse();
 	BlockCourse(unsigned int courseKey, std::string title, std::string major, float creditPoints);
 	~BlockCourse();
 
