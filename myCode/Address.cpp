@@ -1,5 +1,10 @@
 #include "Address.h"
+#include <istream>
 #include <ostream>
+#include <sstream>
+#include <string>
+
+using namespace std;
 
 Address::Address(std::string street, unsigned short postalCode, std::string cityName, std::string additionalInfo)
 {
@@ -37,4 +42,17 @@ const std::string& Address::getStreet() const
 void Address::write(std::ostream &out) const
 {
 	out << street << ';' << postalCode << ';' << cityName << ';' << additionalInfo << "\n";
+}
+
+void Address::read(std::istream &in)
+{
+	string line, temp;
+	getline(in, line);  // Read full line
+	istringstream iss(line);  // Create stringstream
+
+	getline(iss, street, ';');
+	getline(iss, temp, ';');
+	postalCode = static_cast<unsigned short>(stoi(temp));  // Convert string to unsigned short
+	getline(iss, cityName, ';');
+	getline(iss, additionalInfo, ';');
 }

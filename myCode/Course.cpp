@@ -1,5 +1,9 @@
 #include "Course.h"
 #include <ostream>
+#include <string>
+#include <sstream>
+
+using namespace std;
 
 
 std::map<unsigned char, std::string> Course::majorById =
@@ -68,4 +72,18 @@ void Course::write(std::ostream &out) const
 const std::map<unsigned char, std::string>& Course::getMajorById()
 {
     return Course::majorById; // Explicitly qualify the static member
+}
+
+void Course::read(std::istream &in)
+{
+	string line, temp;
+	getline(in, line);  // Read full line
+	istringstream iss(line);  // Create stringstream
+	getline(iss, temp, ';');
+	courseKey = static_cast<unsigned int>(stoi(temp));  // Convert string to unsigned int
+	getline(iss, title, ';');
+	std::string majorStr;
+	getline(iss, majorStr, ';');  // Read as a string
+	major = majorStr[0];//access first character
+	creditPoints = stof(temp);  // Convert string to float
 }

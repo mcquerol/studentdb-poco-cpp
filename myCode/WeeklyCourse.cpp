@@ -1,5 +1,10 @@
 #include "WeeklyCourse.h"
+#include <istream>
 #include <ostream>
+#include <sstream>
+#include <string>
+
+using namespace std;
 
 WeeklyCourse::WeeklyCourse(unsigned int courseKey, std::string title, std::string major, float creditPoints)
 : Course(courseKey,title,major,creditPoints)
@@ -52,4 +57,39 @@ void WeeklyCourse::write(std::ostream &out) const
 	out << dayOfWeek << ';';
 	out << startTime.hour() << '.' << startTime.minute() << '.' << startTime.second() << ';';
 	out << endTime.hour() << '.' << endTime.minute() << '.' << endTime.second() << "\n";
+}
+
+void WeeklyCourse::read(std::istream &in)
+{
+	string line, temp;
+	string dayOfWeekStr;
+	string startTimeStr, endTimeStr;
+	string hour, minute, second;
+
+	Course::read(in);
+
+	getline(in, line);  // Read full line
+	istringstream iss(line);  // Create stringstream
+	getline(iss, dayOfWeekStr, ';');
+	dayOfWeek = static_cast<Poco::DateTime::DaysOfWeek>(stoi(dayOfWeekStr));
+
+	getline(iss, startTimeStr, ';');
+	istringstream timeStreamStart(startTimeStr);
+	getline(timeStreamStart, temp, '.');
+	int startHour = stoi(temp);
+	getline(timeStreamStart, temp, '.');
+	int startMinute = stoi(temp);
+	getline(timeStreamStart, temp, '.');
+	int startSecond = stoi(temp);
+	startTime = Poco::Data::Time(startHour, startMinute, startSecond);
+
+	getline(iss, endTimeStr, ';');
+	istringstream timeStreamEnd(endTimeStr);
+	getline(timeStreamEnd, temp, '.');
+	int endHour = stoi(temp);
+	getline(timeStreamEnd, temp, '.');
+	int endMinute = stoi(temp);
+	getline(timeStreamEnd, temp, '.');
+	int endSecond = stoi(temp);
+	endTime = Poco::Data::Time(endHour, endMinute, endSecond);
 }

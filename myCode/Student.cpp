@@ -1,5 +1,10 @@
 #include "Student.h"
+#include <istream>
 #include <ostream>
+#include <sstream>
+#include <string>
+
+using namespace std;
 
 unsigned int Student::nextMatrikelNumber = 100000;
 
@@ -85,4 +90,30 @@ void Student::write(std::ostream &out) const
 void Student::setNextMatrikelNumber(unsigned int newMatrikelNumber)
 {
     Student::nextMatrikelNumber = newMatrikelNumber;
+}
+
+void Student::read(std::istream &in)
+{
+	string line, temp;
+	string dateOfBirthStr;
+	string year, month, day;
+
+	getline(in, line);  // Read full line
+	istringstream iss(line);  // Create stringstream
+
+	getline(iss, temp, ';');
+	matrikelNumber = static_cast<unsigned int>(stoi(temp));  // Convert string to unsigned int
+	getline(iss, lastName, ';');
+	getline(iss, firstName, ';');
+
+	getline(iss, dateOfBirthStr, ';');
+	istringstream dateStreamStart(dateOfBirthStr);
+	getline(dateStreamStart, day, '.');
+	getline(dateStreamStart, month, '.');
+	getline(dateStreamStart, year, '.');
+	dateOfBirth = Poco::Data::Date(stoi(year), stoi(month), stoi(day));
+
+	address.read(in);
+
+
 }
