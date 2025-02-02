@@ -29,7 +29,7 @@ public:
 	void setStartTime(const Poco::Data::Time &startTime);
 
 	void write(std::ostream& out) const; //write attributes to os stream
-
+	void read(std::istream& in);
 };
 
 #endif

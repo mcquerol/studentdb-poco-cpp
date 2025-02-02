@@ -24,6 +24,8 @@ public:
 	const std::string& getStreet() const;
 
 	void write(std::ostream& out) const; //write attributes to os stream
+	void read(std::istream& in);
+
 
 };
 

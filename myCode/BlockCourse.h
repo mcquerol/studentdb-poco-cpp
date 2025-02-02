@@ -32,6 +32,7 @@ public:
 	void setEndDate(const Poco::Data::Date &endDate);
 
 	void write(std::ostream& out) const; //write attributes to os stream
+	void read(std::istream& in);
 };
 
 #endif

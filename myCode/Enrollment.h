@@ -25,6 +25,8 @@ public:
 	const Course& getCourse() const;
 
 	void write(std::ostream& out) const; //write attributes to os stream
+	void read(std::istream& in);
+
 };
 
 #endif
