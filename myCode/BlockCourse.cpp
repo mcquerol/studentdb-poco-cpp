@@ -1,6 +1,5 @@
 #include "BlockCourse.h"
-#include <istream>
-#include <ostream>
+#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -60,7 +59,9 @@ void BlockCourse::setEndDate(const Poco::Data::Date &endDate)
 void BlockCourse::write(std::ostream &out) const
 {
 	out << "B;";
+
 	Course::write(out);
+
 	out << startDate.day() << '.' << startDate.month() << '.' << startDate.year() << ';';
 	out << endDate.day() << '.' << endDate.month() << '.' << endDate.year() << ';';
 	out << startTime.hour() << '.' << startTime.minute() << '.' << startTime.second();
@@ -69,46 +70,64 @@ void BlockCourse::write(std::ostream &out) const
 
 void BlockCourse::read(std::istream &in)
 {
-	string line, temp;
+	string line;
 	string startTimeStr, endTimeStr, startDateStr, endDateStr;
-	string year, month, day;
+	int day, month, year;
+	int startHour, startMinute, startSecond, endHour, endMinute, endSecond;
 
+	std::cout << "Debug: Entering BlockCourse::read()" << std::endl;
 	Course::read(in);
-	getline(in, line);  // Read full line
-	istringstream iss(line);  // Create stringstream
 
-	getline(iss, startDateStr, ';');
+	getline(in, startDateStr, ';');
 	istringstream dateStreamStart(startDateStr);
-	getline(dateStreamStart, day, '.');
-	getline(dateStreamStart, month, '.');
-	getline(dateStreamStart, year, '.');
-	startDate = Poco::Data::Date(stoi(year), stoi(month), stoi(day));
+	getline(dateStreamStart, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	day = stoi(line);
+	getline(dateStreamStart, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	month = stoi(line);
+	getline(dateStreamStart, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	year = stoi(line);
+	startDate = Poco::Data::Date(year, month, day);
 
-	getline(iss, endDateStr, ';');
+	getline(in, endDateStr, ';');
 	istringstream dateStreamEnd(endDateStr);
-	getline(dateStreamEnd, day, '.');
-	getline(dateStreamEnd, month, '.');
-	getline(dateStreamEnd, year, '.');
-	endDate = Poco::Data::Date(stoi(year), stoi(month), stoi(day));
+	getline(dateStreamEnd, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	day = stoi(line);
+	getline(dateStreamEnd, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	month = stoi(line);
+	getline(dateStreamEnd, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	year = stoi(line);
+	endDate = Poco::Data::Date(year, month, day);
 
-	getline(iss, startTimeStr, ';');
+	getline(in, startTimeStr, ';');
 	istringstream timeStreamStart(startTimeStr);
-	getline(timeStreamStart, temp, '.');
-	int startHour = stoi(temp);
-	getline(timeStreamStart, temp, '.');
-	int startMinute = stoi(temp);
-	getline(timeStreamStart, temp, '.');
-	int startSecond = stoi(temp);
+	getline(timeStreamStart, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	startHour = stoi(line);
+	getline(timeStreamStart, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	startMinute = stoi(line);
+	getline(timeStreamStart, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	startSecond = stoi(line);
 	startTime = Poco::Data::Time(startHour, startMinute, startSecond);
 
-	getline(iss, endTimeStr, ';');
+	getline(in, endTimeStr, ';');
 	istringstream timeStreamEnd(endTimeStr);
-	getline(timeStreamEnd, temp, '.');
-	int endHour = stoi(temp);
-	getline(timeStreamEnd, temp, '.');
-	int endMinute = stoi(temp);
-	getline(timeStreamEnd, temp, '.');
-	int endSecond = stoi(temp);
+	getline(timeStreamEnd, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	endHour = stoi(line);
+	getline(timeStreamEnd, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	endMinute = stoi(line);
+	getline(timeStreamEnd, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	endSecond = stoi(line);
 	endTime = Poco::Data::Time(endHour, endMinute, endSecond);
 
 }

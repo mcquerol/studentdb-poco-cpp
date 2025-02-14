@@ -1,10 +1,13 @@
 #include "Address.h"
-#include <istream>
-#include <ostream>
+#include <iostream>
 #include <sstream>
 #include <string>
 
 using namespace std;
+
+Address::Address()
+{
+}
 
 Address::Address(std::string street, unsigned short postalCode, std::string cityName, std::string additionalInfo)
 {
@@ -12,7 +15,6 @@ Address::Address(std::string street, unsigned short postalCode, std::string city
 	this->postalCode = postalCode;
 	this->cityName = cityName;
 	this->additionalInfo = additionalInfo;
-
 }
 
 Address::~Address()
@@ -44,19 +46,14 @@ void Address::write(std::ostream &out) const
 	out << street << ';' << postalCode << ';' << cityName << ';' << additionalInfo << "\n";
 }
 
-Address::Address()
-{
-}
-
 void Address::read(std::istream &in)
 {
-	string line, temp;
-	getline(in, line);  // Read full line
-	istringstream iss(line);  // Create stringstream
+	string line;
 
-	getline(iss, street, ';');
-	getline(iss, temp, ';');
-	postalCode = static_cast<unsigned short>(stoi(temp));  // Convert string to unsigned short
-	getline(iss, cityName, ';');
-	getline(iss, additionalInfo, ';');
+	getline(in, street, ';');
+	getline(in, line, ';');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	postalCode = static_cast<unsigned short>(stoi(line));  // Convert string to unsigned short
+	getline(in, cityName, ';');
+	getline(in, additionalInfo, ';');
 }

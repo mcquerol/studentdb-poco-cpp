@@ -1,6 +1,5 @@
 #include "Enrollment.h"
-#include <istream>
-#include <ostream>
+#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -46,11 +45,23 @@ void Enrollment::write(std::ostream &out) const
 
 void Enrollment::read(std::istream &in)
 {
-	string line, temp;
+//	string line;
+//	getline(in, semester, ';');
+//	getline(in, line, ';');
+//	grade = (stof(line));  // Convert string to float
 
-	getline(in, line);  // Read full line
-	istringstream iss(line);  // Create stringstream
-	getline(iss, semester, ';');
-	getline(iss, temp, ';');
-	grade = (stof(temp));  // Convert string to unsigned int
+    std::string temp, line;
+
+    std::cout << "Debug: Reading Enrollment line..." << std::endl;
+    getline(in, line);
+    std::cout << "Debug: Read line: '" << line << "'" << std::endl;
+
+    std::istringstream iss(line);
+
+    getline(iss, semester, ';');
+    std::cout << "Debug: Semester: '" << semester << "'" << std::endl;
+
+    getline(iss, temp, ';');
+    std::cout << "Debug: Attempting to convert Grade: '" << temp << "'" << std::endl;
+    grade = stof(temp);
 }

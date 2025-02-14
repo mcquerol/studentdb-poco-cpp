@@ -94,23 +94,22 @@ void StudentDb::read(std::istream &in)
 	for(size_t i = 0; i < courseCount; i++)
 	{
 		char courseType;
-
-		getline(in, line);  // Read full line
-		istringstream iss(line);  // Create stringstream
-		getline(iss, temp, ';');
-		courseType = temp[0];  // Extract first character safely
-
+		getline(in, line);  // Read the next line before extracting first character
+		courseType = line[0];  // Extract first character safely (either W or B)
+		cout << courseType << endl;
 		if (courseType == 'W')
 		{
 			unique_ptr<WeeklyCourse> weeklyCourse = std::make_unique<WeeklyCourse>();
-			weeklyCourse->read(in);
-			setCourse(move(weeklyCourse));
+			std::istringstream lineStream(line.substr(2)); // Start reading after "W;
+			weeklyCourse->read(lineStream);
+			setCourse(move(weeklyCourse)); // add to courses map
 		}
 		else if (courseType == 'B')
 		{
 			unique_ptr<BlockCourse> blockCourse = std::make_unique<BlockCourse>();
-			blockCourse->read(in);
-			setCourse(move(blockCourse));
+			std::istringstream lineStream(line.substr(2)); // Start reading after "W;
+			blockCourse->read(lineStream);
+			setCourse(move(blockCourse)); // add to courses map
 		}
 	}
 
@@ -118,11 +117,9 @@ void StudentDb::read(std::istream &in)
 	in.ignore();
 	for(size_t i = 0; i < studentCount; i++)
 	{
-		auto student = students.at(i);
-		//create temporary object
-		Student s;
-		s.read(in);
-		setStudent(s);
+        Student s;
+        s.read(in);
+        setStudent(s); // add to students map
 	}
 
 	in >> enrollmentCount;
@@ -130,12 +127,14 @@ void StudentDb::read(std::istream &in)
 	for(size_t i = 0; i < enrollmentCount; i++)
 	{
 		unsigned int matrikelNumber, courseKey;
+
 		istringstream iss(line);
 		getline(iss, temp, ';');
+		std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << temp << "'" << std::endl;
 		matrikelNumber = static_cast<unsigned int>(stoi(temp));  // Convert string to unsigned int
 		getline(iss, temp, ';');
+		std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << temp << "'" << std::endl;
 		courseKey = static_cast<unsigned int>(stoi(temp));  // Convert string to unsigned int
-
 		Enrollment e;
 		e.read(in);
 

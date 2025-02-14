@@ -1,6 +1,5 @@
 #include "Student.h"
-#include <istream>
-#include <ostream>
+#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -98,26 +97,29 @@ void Student::setNextMatrikelNumber(unsigned int newMatrikelNumber)
 
 void Student::read(std::istream &in)
 {
-	string line, temp;
+	string line;
 	string dateOfBirthStr;
-	string year, month, day;
+	int day, month, year;
 
-	getline(in, line);  // Read full line
-	istringstream iss(line);  // Create stringstream
+	getline(in, line, ';');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	matrikelNumber = static_cast<unsigned int>(stoi(line));  // Convert string to unsigned int
+	getline(in, lastName, ';');
+	getline(in, firstName, ';');
 
-	getline(iss, temp, ';');
-	matrikelNumber = static_cast<unsigned int>(stoi(temp));  // Convert string to unsigned int
-	getline(iss, lastName, ';');
-	getline(iss, firstName, ';');
-
-	getline(iss, dateOfBirthStr, ';');
+	getline(in, dateOfBirthStr, ';');
 	istringstream dateStreamStart(dateOfBirthStr);
-	getline(dateStreamStart, day, '.');
-	getline(dateStreamStart, month, '.');
-	getline(dateStreamStart, year, '.');
-	dateOfBirth = Poco::Data::Date(stoi(year), stoi(month), stoi(day));
+	getline(dateStreamStart, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	day = stoi(line);
+	getline(dateStreamStart, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	month = stoi(line);
+	getline(dateStreamStart, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	year = stoi(line);
+	dateOfBirth = Poco::Data::Date(year, month, day);
 
 	address.read(in);
-
 
 }

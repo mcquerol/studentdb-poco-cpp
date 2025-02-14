@@ -1,6 +1,5 @@
 #include "WeeklyCourse.h"
-#include <istream>
-#include <ostream>
+#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -65,35 +64,43 @@ void WeeklyCourse::write(std::ostream &out) const
 
 void WeeklyCourse::read(std::istream &in)
 {
-	string line, temp;
+	string line;
 	string dayOfWeekStr;
 	string startTimeStr, endTimeStr;
-	string hour, minute, second;
+	int startHour, startMinute, startSecond, endHour, endMinute, endSecond;
 
+	std::cout << "Debug: Entering WeeklyCourse::read()" << std::endl;
 	Course::read(in);
 
-	getline(in, line);  // Read full line
-	istringstream iss(line);  // Create stringstream
+	std::istringstream iss(line);
+
 	getline(iss, dayOfWeekStr, ';');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert dayofweek to int: '" << dayOfWeekStr << "'" << std::endl;
 	dayOfWeek = static_cast<Poco::DateTime::DaysOfWeek>(stoi(dayOfWeekStr));
 
 	getline(iss, startTimeStr, ';');
 	istringstream timeStreamStart(startTimeStr);
-	getline(timeStreamStart, temp, '.');
-	int startHour = stoi(temp);
-	getline(timeStreamStart, temp, '.');
-	int startMinute = stoi(temp);
-	getline(timeStreamStart, temp, '.');
-	int startSecond = stoi(temp);
+	getline(timeStreamStart, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	startHour = stoi(line);
+	getline(timeStreamStart, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	startMinute = stoi(line);
+	getline(timeStreamStart, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	startSecond = stoi(line);
 	startTime = Poco::Data::Time(startHour, startMinute, startSecond);
 
-	getline(iss, endTimeStr, ';');
+	getline(in, endTimeStr, ';');
 	istringstream timeStreamEnd(endTimeStr);
-	getline(timeStreamEnd, temp, '.');
-	int endHour = stoi(temp);
-	getline(timeStreamEnd, temp, '.');
-	int endMinute = stoi(temp);
-	getline(timeStreamEnd, temp, '.');
-	int endSecond = stoi(temp);
+	getline(timeStreamEnd, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	endHour = stoi(line);
+	getline(timeStreamEnd, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	endMinute = stoi(line);
+	getline(timeStreamEnd, line, '.');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
+	endSecond = stoi(line);
 	endTime = Poco::Data::Time(endHour, endMinute, endSecond);
 }
