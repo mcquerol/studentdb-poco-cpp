@@ -96,18 +96,17 @@ void StudentDb::read(std::istream &in)
 		char courseType;
 		getline(in, line);  // Read the next line before extracting first character
 		courseType = line[0];  // Extract first character safely (either W or B)
-		cout << courseType << endl;
+		cout << courseType << endl; //debug the character W or B
+		std::istringstream lineStream(line.substr(2)); // Start reading after "W;
 		if (courseType == 'W')
 		{
 			unique_ptr<WeeklyCourse> weeklyCourse = std::make_unique<WeeklyCourse>();
-			std::istringstream lineStream(line.substr(2)); // Start reading after "W;
 			weeklyCourse->read(lineStream);
 			setCourse(move(weeklyCourse)); // add to courses map
 		}
 		else if (courseType == 'B')
 		{
 			unique_ptr<BlockCourse> blockCourse = std::make_unique<BlockCourse>();
-			std::istringstream lineStream(line.substr(2)); // Start reading after "W;
 			blockCourse->read(lineStream);
 			setCourse(move(blockCourse)); // add to courses map
 		}
@@ -115,6 +114,7 @@ void StudentDb::read(std::istream &in)
 
 	in >> studentCount;
 	in.ignore();
+	cout << studentCount << endl;
 	for(size_t i = 0; i < studentCount; i++)
 	{
         Student s;
@@ -124,9 +124,17 @@ void StudentDb::read(std::istream &in)
 
 	in >> enrollmentCount;
 	in.ignore();
+	std::cout << "Debug: Read Enrollment Count: " << enrollmentCount << std::endl;
+
+	// Add an extra getline() here to clear any remaining newline
+	getline(in, temp);
+	std::cout << "Debug: Extra getline() to clear any remaining newline" << temp << std::endl;
 	for(size_t i = 0; i < enrollmentCount; i++)
 	{
 		unsigned int matrikelNumber, courseKey;
+
+	    getline(in, line);  // Read full line
+	    std::cout << "Debug: Read Enrollment Line: '" << line << "'" << std::endl;
 
 		istringstream iss(line);
 		getline(iss, temp, ';');
