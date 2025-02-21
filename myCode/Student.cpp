@@ -104,8 +104,12 @@ void Student::read(std::istream &in)
 	getline(in, line, ';');
 	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
 	matrikelNumber = static_cast<unsigned int>(stoi(line));  // Convert string to unsigned int
-	getline(in, lastName, ';');
-	getline(in, firstName, ';');
+	getline(in, line, ';');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to string: '" << line << "'" << std::endl;
+	lastName = line;
+	getline(in, line, ';');
+	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to string: '" << line << "'" << std::endl;
+	firstName = line;
 
 	getline(in, dateOfBirthStr, ';');
 	istringstream dateStreamStart(dateOfBirthStr);
