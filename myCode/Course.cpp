@@ -81,34 +81,18 @@ const std::map<unsigned char, std::string>& Course::getMajorById()
 void Course::read(std::istream &in)
 {
 	string line, temp, majorStr;
-//
-//
-//	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
-//	this->courseKey = static_cast<unsigned int>(stoi(line));  // Convert string to unsigned int
-//	getline(in, this->title, ';');
-//	string majorStr;
-//	getline(in, majorStr, ';');  // Read as a string
-//	this->major = majorStr[0];//access first character
-//	getline(in, line, ';');
-//	creditPoints = stof(line);  // Convert string to float
-
-    std::cout << "Debug: Reading Course line..." << std::endl;
-    getline(in, line);  // Read full line
-    std::cout << "Debug: Read line: '" << line << "'" << std::endl;
-
-    std::istringstream iss(line);
 
     std::cout << "Debug: Reading Course Key..." << std::endl;
-    getline(iss, temp, ';');
+    getline(in, temp, ';');
     std::cout << "Debug: Extracted Course Key: '" << temp << "'" << std::endl;
     courseKey = static_cast<unsigned int>(stoi(temp));
 
     std::cout << "Debug: Reading Title..." << std::endl;
-    getline(iss, title, ';');
+    getline(in, title, ';');
     std::cout << "Debug: Extracted Title: '" << title << "'" << std::endl;
 
     std::cout << "Debug: Reading Major..." << std::endl;
-    getline(iss, majorStr, ';');
+    getline(in, majorStr, ';');
     std::cout << "Debug: Extracted Major: '" << majorStr << "'" << std::endl;
     if (!majorStr.empty()) {
         this->major = majorStr[0];
@@ -117,7 +101,15 @@ void Course::read(std::istream &in)
     }
 
     std::cout << "Debug: Reading Credit Points..." << std::endl;
-    getline(iss, temp, ';');
+    getline(in, temp, ';');
     std::cout << "Debug: Extracted Credit Points: '" << temp << "'" << std::endl;
     creditPoints = stof(temp);
+    std::cout << "Debug: Leaving Course::read(), next char in stream: '" << in.peek() << "' (ASCII: " << int(in.peek()) << ")" << std::endl;
+
+    if (in.peek() == '\n') {
+        std::cout << "Debug: Newline detected, ignoring it..." << std::endl;
+        in.ignore();
+    }
+
+
 }
