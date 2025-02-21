@@ -13,7 +13,7 @@ WeeklyCourse::WeeklyCourse(unsigned int courseKey, std::string title, std::strin
 : Course(courseKey,title,major,creditPoints)
 {
 
-	this->dayOfWeek = Poco::DateTime::DaysOfWeek::SUNDAY; // default day is sunday
+	this->dayOfWeek = 0; // default day is sunday
 	this->startTime = -1; // default startTime
 	this->endTime = -1; // default endTime
 
@@ -23,7 +23,7 @@ WeeklyCourse::~WeeklyCourse()
 {
 }
 
-Poco::DateTime::DaysOfWeek WeeklyCourse::getDayOfWeek() const
+int WeeklyCourse::getDayOfWeek() const
 {
 	return dayOfWeek;
 }
@@ -38,7 +38,7 @@ const Poco::Data::Time& WeeklyCourse::getEndTime() const
 	return endTime;
 }
 
-void WeeklyCourse::setDayOfWeek(Poco::DateTime::DaysOfWeek dayOfWeek)
+void WeeklyCourse::setDayOfWeek(int dayOfWeek)
 {
 	this->dayOfWeek = dayOfWeek;
 }
@@ -72,13 +72,16 @@ void WeeklyCourse::read(std::istream &in)
 	std::cout << "Debug: Entering WeeklyCourse::read()" << std::endl;
 	Course::read(in);
 
-	std::istringstream iss(line);
+	std::getline(in, line, ';');
+	std::cout << "Debug: Extracted DayOfWeek: '" << line << "'" << std::endl;
+	if (line.empty()) {
+	    std::cerr << "ERROR: DayOfWeek is EMPTY! CHECK INPUT FILE OR GETLINE ORDER." << std::endl;
+	} else {
+	    dayOfWeek = stoi(line);
+	}
 
-	getline(iss, dayOfWeekStr, ';');
-	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert dayofweek to int: '" << dayOfWeekStr << "'" << std::endl;
-	dayOfWeek = static_cast<Poco::DateTime::DaysOfWeek>(stoi(dayOfWeekStr));
 
-	getline(iss, startTimeStr, ';');
+	getline(in, startTimeStr, ';');
 	istringstream timeStreamStart(startTimeStr);
 	getline(timeStreamStart, line, '.');
 	std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << line << "'" << std::endl;
