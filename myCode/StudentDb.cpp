@@ -124,17 +124,11 @@ void StudentDb::read(std::istream &in)
 
 	in >> enrollmentCount;
 	in.ignore();
-	std::cout << "Debug: Read Enrollment Count: " << enrollmentCount << std::endl;
+	cout << enrollmentCount << endl;
 
-	// Add an extra getline() here to clear any remaining newline
-	getline(in, temp);
-	std::cout << "Debug: Extra getline() to clear any remaining newline" << temp << std::endl;
 	for(size_t i = 0; i < enrollmentCount; i++)
 	{
 		unsigned int matrikelNumber, courseKey;
-
-	    getline(in, line);  // Read full line
-	    std::cout << "Debug: Read Enrollment Line: '" << line << "'" << std::endl;
 
 		istringstream iss(line);
 		getline(iss, temp, ';');
