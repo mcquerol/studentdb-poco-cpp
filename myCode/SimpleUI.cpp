@@ -99,7 +99,8 @@ unsigned int SimpleUI::getValidatedUnsignedInt(const std::string& prompt, unsign
         cin >> value;
 
         // Check if the input was invalid or out of range
-        if (cin.fail() || value < min || value > max) {
+        if (cin.fail() || value < min || value > max)
+        {
             cin.clear(); // Clear the error flag
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
             cerr << "Invalid input. Please enter a number between " << min << " and " << max << "." << endl;
@@ -150,7 +151,8 @@ std::string SimpleUI::getValidatedString(const std::string& prompt, bool allowNu
 
         std::getline(cin, input);
 
-        if (input.empty()) {
+        if (input.empty())
+        {
             cerr << "Input cannot be empty. Please try again." << endl;
             continue;
         }
