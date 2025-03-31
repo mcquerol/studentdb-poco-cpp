@@ -114,7 +114,6 @@ void StudentDb::read(std::istream &in)
 
 	in >> studentCount;
 	in.ignore();
-	cout << studentCount << endl;
 	for(size_t i = 0; i < studentCount; i++)
 	{
         Student s;
@@ -122,23 +121,29 @@ void StudentDb::read(std::istream &in)
         setStudent(s); // add to students map
 	}
 
+
 	in >> enrollmentCount;
 	in.ignore();
-	cout << enrollmentCount << endl;
 
 	for(size_t i = 0; i < enrollmentCount; i++)
 	{
-		unsigned int matrikelNumber, courseKey;
+	    std::string line, temp;
+	    unsigned int matrikelNumber, courseKey;
 
-		istringstream iss(line);
-		getline(iss, temp, ';');
-		std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << temp << "'" << std::endl;
-		matrikelNumber = static_cast<unsigned int>(stoi(temp));  // Convert string to unsigned int
-		getline(iss, temp, ';');
-		std::cout << "Debug: [" << __FILE__ << ":" << __LINE__ << "] Attempting to convert to int: '" << temp << "'" << std::endl;
-		courseKey = static_cast<unsigned int>(stoi(temp));  // Convert string to unsigned int
-		Enrollment e;
-		e.read(in);
+	    getline(in, line);                      // Read the whole line
+	    std::istringstream iss(line);          // Create stream from line
+
+	    // Extract matrikel number
+	    getline(iss, temp, ';');
+	    matrikelNumber = static_cast<unsigned int>(std::stoi(temp));
+	    // Extract course key
+	    getline(iss, temp, ';');
+	    courseKey = static_cast<unsigned int>(std::stoi(temp));
+
+	    // Extract remaining enrollment data (semester and grade)
+	    Enrollment e;
+	    e.read(iss);  // Pass the stream! DO NOT call getline again here.
+
 
 		if (courses.find(courseKey) == courses.end())
 		{
