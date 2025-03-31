@@ -82,34 +82,27 @@ void Course::read(std::istream &in)
 {
 	string line, temp, majorStr;
 
-    std::cout << "Debug: Reading Course Key..." << std::endl;
     getline(in, temp, ';');
-    std::cout << "Debug: Extracted Course Key: '" << temp << "'" << std::endl;
     courseKey = static_cast<unsigned int>(stoi(temp));
 
-    std::cout << "Debug: Reading Title..." << std::endl;
     getline(in, title, ';');
-    std::cout << "Debug: Extracted Title: '" << title << "'" << std::endl;
 
-    std::cout << "Debug: Reading Major..." << std::endl;
     getline(in, majorStr, ';');
-    std::cout << "Debug: Extracted Major: '" << majorStr << "'" << std::endl;
-    if (!majorStr.empty()) {
+    if (!majorStr.empty())
+    {
         this->major = majorStr[0];
-    } else {
+    }
+    else
+    {
         std::cerr << "Warning: Major string is empty!" << std::endl;
     }
 
-    std::cout << "Debug: Reading Credit Points..." << std::endl;
     getline(in, temp, ';');
-    std::cout << "Debug: Extracted Credit Points: '" << temp << "'" << std::endl;
     creditPoints = stof(temp);
-    std::cout << "Debug: Leaving Course::read(), next char in stream: '" << in.peek() << "' (ASCII: " << int(in.peek()) << ")" << std::endl;
 
-    if (in.peek() == '\n') {
-        std::cout << "Debug: Newline detected, ignoring it..." << std::endl;
+    if (in.peek() == '\n')
+    {
         in.ignore();
     }
-
 
 }
