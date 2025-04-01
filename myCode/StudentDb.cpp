@@ -96,7 +96,6 @@ void StudentDb::read(std::istream &in)
 		char courseType;
 		getline(in, line);  // Read the next line before extracting first character
 		courseType = line[0];  // Extract first character safely (either W or B)
-		cout << courseType << endl; //debug the character W or B
 		std::istringstream lineStream(line.substr(2)); // Start reading after "W;
 		if (courseType == 'W')
 		{
@@ -121,7 +120,6 @@ void StudentDb::read(std::istream &in)
         setStudent(s); // add to students map
 	}
 
-
 	in >> enrollmentCount;
 	in.ignore();
 
@@ -143,7 +141,6 @@ void StudentDb::read(std::istream &in)
 	    // Extract remaining enrollment data (semester and grade)
 	    Enrollment e;
 	    e.read(iss);  // Pass the stream! DO NOT call getline again here.
-
 
 		if (courses.find(courseKey) == courses.end())
 		{
