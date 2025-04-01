@@ -6,7 +6,14 @@
 
 #include <fstream>
 #include <iostream>
+#include <iostream>
+#include <string>
 
+#include <boost/asio.hpp>
+#include <boost/json.hpp>
+
+using boost::asio::ip::tcp;
+namespace json = boost::json;
 using namespace std;
 
 /* Error handling and input validation help functions
@@ -232,6 +239,7 @@ void SimpleUI::run()
 		cout << "7. Update student" << endl;
 		cout << "8. Write student db contents to csv file" << endl;
 		cout << "9. Read csv contents to db" << endl;
+		cout << "10. " << endl;
 		cout << "or type 0 to terminate" << endl;
 
 		choice = getValidatedUnsignedInt("Enter choice: ", 0, 9);
@@ -247,6 +255,7 @@ void SimpleUI::run()
 			case 7 : updateStudent(); break;
 			case 8 : writeToCsv(); break;
 			case 9 : readFromCsv(); break;
+			case 10 : obtainingTestData(); break;
 			case 0 : cerr << "Program Terminated" << endl; return;
 			default: cerr << "Invalid choice. Please try again." << endl;
 		}
@@ -651,4 +660,56 @@ void SimpleUI::readFromCsv()
 
 	db->read(csvFile);
 	csvFile.close();  // Ensure file is closed properly
+}
+
+void SimpleUI::obtainingTestData()
+{
+
+	tcp::iostream stream;
+	stream.connect("www.hhs.users.h-da.cloud", "4242");
+	if (!stream)
+	{
+	    cerr << "Failed to connect to server!" << endl;
+	}
+	else
+	{
+	    cout << "Connected successfully!" << endl;
+	}
+
+	for(int i = 0; i < 10; i++)
+	{
+		stream << "generate\n";
+		stream.flush();
+		string generatingStr;
+		getline(stream, generatingStr);
+	    string jsonStr;
+	    getline(stream, jsonStr);
+	    json::value jv = json::parse(jsonStr);
+
+	    json::object dateOfBirth = jv.at("dateOfBirth").as_object();
+	    int day = dateOfBirth.at("day").as_int64();
+	    int month = dateOfBirth.at("month").as_int64();
+	    int year = dateOfBirth.at("year").as_int64();
+	    cout << day << '.' << month << '.' << 1900 + year << endl;
+	    cout << endl;
+
+	    json::object address = jv.at("location").as_object();
+	    string cityName = string((address.at("city").as_string()).c_str());
+	    string postalCode = string(((address.at("postCode").as_string())).c_str());
+	    string street = string((address.at("street").as_string()).c_str());
+	    cout << "city: " << cityName << endl;
+	    cout << "postal code: " << postalCode << endl;
+	    cout << "street: " << street << endl;
+	    cout << endl;
+
+	    json::object name = jv.at("name").as_object();
+	    string firstName = string((name.at("firstName").as_string()).c_str());
+	    string lastName = string((name.at("lastName").as_string()).c_str());
+	    cout << "first name: " << firstName << endl;
+	    cout << "last name: " << lastName << endl;
+	    cout << endl;
+	}
+	stream << "quit\n";
+	stream.flush();
+	stream.close();
 }
