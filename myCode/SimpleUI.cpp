@@ -239,10 +239,10 @@ void SimpleUI::run()
 		cout << "7. Update student" << endl;
 		cout << "8. Write student db contents to csv file" << endl;
 		cout << "9. Read csv contents to db" << endl;
-		cout << "10. " << endl;
+		cout << "10. Obtain test data from server" << endl;
 		cout << "or type 0 to terminate" << endl;
 
-		choice = getValidatedUnsignedInt("Enter choice: ", 0, 9);
+		choice = getValidatedUnsignedInt("Enter choice: ", 0, 10);
 
 		switch(choice)
 		{
@@ -632,6 +632,10 @@ void SimpleUI::updateStudent()
 
 void SimpleUI::writeToCsv()
 {
+	cout << "-------------------------" << endl;
+	cout << "8. Write studentdb contents to csv file" << endl;
+	cout << "-------------------------" << endl;
+	cout << endl;
 	ofstream csvFile;
 	string fileName = getValidatedString("Enter a file name: ", true);
 	csvFile.open(fileName);
@@ -648,6 +652,10 @@ void SimpleUI::writeToCsv()
 
 void SimpleUI::readFromCsv()
 {
+	cout << "-------------------------" << endl;
+	cout << "9. Read csv contents to studentDb" << endl;
+	cout << "-------------------------" << endl;
+	cout << endl;
 	ifstream csvFile;
 	string fileName = getValidatedString("Enter a file name: ", true);
 	csvFile.open(fileName);
@@ -664,16 +672,64 @@ void SimpleUI::readFromCsv()
 
 void SimpleUI::obtainingTestData()
 {
+//	int userCount;
+//	std::cout << "How many users to generate? ";
+//	std::cin >> userCount;
+//	std::cin.ignore(); // flush newline
+//
+//	tcp::iostream stream("www.hhs.users.h-da.cloud", "4242");
+//
+//	if (!stream) {
+//	    std::cerr << "Failed to connect.\n";
+//	    return;
+//	}
+//
+//	for (int i = 0; i < 10; ++i) {
+//	    stream << "generate\n";
+//	    stream.flush();
+//
+//	    std::string jsonStr;
+//	    std::getline(stream, jsonStr); // actual JSON
+//	    std::string responseStatus;
+//	    std::getline(stream, responseStatus); // like "200 Data generated."
+//
+//	    try {
+//	        boost::json::value jv = boost::json::parse(jsonStr);
+//	        const auto& obj = jv.as_object();
+//
+//	        std::string firstName = obj.at("name").as_object().at("firstName").as_string().c_str();
+//	        std::string lastName  = obj.at("name").as_object().at("lastName").as_string().c_str();
+//
+//	        const auto& dob = obj.at("dateOfBirth").as_object();
+//	        int day = dob.at("date").as_int64();
+//	        int month = dob.at("month").as_int64();
+//	        int year = dob.at("year").as_int64();
+//
+//	        const auto& loc = obj.at("location").as_object();
+//	        std::string street = loc.at("street").as_string().c_str();
+//	        std::string city = loc.at("city").as_string().c_str();
+//	        std::string postcode = loc.at("postCode").as_string().c_str();
+//
+//	        std::cout << firstName << " " << lastName << "\n";
+//	        std::cout << "Born: " << day << "." << (month + 1) << "." << (1900 + year) << "\n";
+//	        std::cout << "Address: " << street << ", " << postcode << " " << city << "\n\n";
+//	    }
+//	    catch (const boost::system::system_error& e) {
+//	        std::cerr << "JSON parsing error: " << e.what() << "\n";
+//	        break;
+//	    }
+//	}
+//
+//	stream << "quit\n";
+//	stream.flush();
+//	stream.close();
 
 	tcp::iostream stream;
 	stream.connect("www.hhs.users.h-da.cloud", "4242");
-	if (!stream)
-	{
-	    cerr << "Failed to connect to server!" << endl;
-	}
-	else
-	{
-	    cout << "Connected successfully!" << endl;
+	if (!stream) {
+		cerr << "Failed to connect to server!" << endl;
+	} else {
+		cout << "Connected successfully!" << endl;
 	}
 
 	for(int i = 0; i < 10; i++)
@@ -682,34 +738,35 @@ void SimpleUI::obtainingTestData()
 		stream.flush();
 		string generatingStr;
 		getline(stream, generatingStr);
-	    string jsonStr;
-	    getline(stream, jsonStr);
-	    json::value jv = json::parse(jsonStr);
+		string jsonStr;
+		getline(stream, jsonStr);
+		json::value jv = json::parse(jsonStr);
 
-	    json::object dateOfBirth = jv.at("dateOfBirth").as_object();
-	    int day = dateOfBirth.at("day").as_int64();
-	    int month = dateOfBirth.at("month").as_int64();
-	    int year = dateOfBirth.at("year").as_int64();
-	    cout << day << '.' << month << '.' << 1900 + year << endl;
-	    cout << endl;
+		json::object dateOfBirth = jv.at("dateOfBirth").as_object();
+		int day = dateOfBirth.at("day").as_int64();
+		int month = dateOfBirth.at("month").as_int64();
+		int year = dateOfBirth.at("year").as_int64();
+		cout << day << '.' << month << '.' << 1900 + year << endl;
+		cout << endl;
 
-	    json::object address = jv.at("location").as_object();
-	    string cityName = string((address.at("city").as_string()).c_str());
-	    string postalCode = string(((address.at("postCode").as_string())).c_str());
-	    string street = string((address.at("street").as_string()).c_str());
-	    cout << "city: " << cityName << endl;
-	    cout << "postal code: " << postalCode << endl;
-	    cout << "street: " << street << endl;
-	    cout << endl;
+		json::object address = jv.at("location").as_object();
+		string cityName = string((address.at("city").as_string()).c_str());
+		string postalCode = string(((address.at("postCode").as_string())).c_str());
+		string street = string((address.at("street").as_string()).c_str());
+		cout << "city: " << cityName << endl;
+		cout << "postal code: " << postalCode << endl;
+		cout << "street: " << street << endl;
+		cout << endl;
 
-	    json::object name = jv.at("name").as_object();
-	    string firstName = string((name.at("firstName").as_string()).c_str());
-	    string lastName = string((name.at("lastName").as_string()).c_str());
-	    cout << "first name: " << firstName << endl;
-	    cout << "last name: " << lastName << endl;
-	    cout << endl;
+		json::object name = jv.at("name").as_object();
+		string firstName = string((name.at("firstName").as_string()).c_str());
+		string lastName = string((name.at("lastName").as_string()).c_str());
+		cout << "first name: " << firstName << endl;
+		cout << "last name: " << lastName << endl;
+		cout << endl;
+		stream.flush();
+		stream << "quit\n";
+		stream.flush();
 	}
-	stream << "quit\n";
-	stream.flush();
 	stream.close();
 }
