@@ -36,6 +36,8 @@ public:
 
 	void writeToCsv();
 	void readFromCsv();
+
+	void obtainingTestData();
 };
 
 #endif
