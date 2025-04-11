@@ -679,13 +679,16 @@ void SimpleUI::obtainingTestData()
 
 	tcp::iostream stream;
 	stream.connect("www.hhs.users.h-da.cloud", "4242");
-	if (!stream) {
+	if (!stream)
+	{
 		cerr << "Failed to connect to server!" << endl;
-	} else {
+	}
+	else
+	{
 		cout << "Connected successfully!" << endl;
 	}
 
-	for (int i = 0; i < userCount; ++i)
+	for (int i = 0; i < userCount; )
 	{
 	    stream << "generate\n";
 	    stream.flush();
@@ -693,52 +696,68 @@ void SimpleUI::obtainingTestData()
 	    std::string line;
 	    json::value jv;
 
-	    // Keep reading until we get valid JSON
 	    while (std::getline(stream, line))
 	    {
 	        try
 	        {
 	            jv = json::parse(line);
-	            break; // success
+	            if (!jv.is_object()) {
+	                std::cerr << "Not a JSON object. Skipping.\n";
+	                continue;
+	            }
+	            break;
 	        }
-	        catch (const boost::system::system_error&)
+	        catch (const std::exception& e)
 	        {
-	            // Not JSON (probably 100 or 200 message), skip
-	            continue;
+	            std::cerr << "Invalid JSON: " << e.what() << " | Line: " << line << std::endl;
 	        }
 	    }
 
-	    // Now jv contains a valid JSON object
 	    json::object obj = jv.as_object();
-	    json::object name = obj["name"].as_object();
-	    std::string firstName = name["firstName"].as_string().c_str();
-	    std::string lastName = name["lastName"].as_string().c_str();
 
-	    json::object location = obj["location"].as_object();
-	    std::string cityName = location["city"].as_string().c_str();
-	    std::string street = location["street"].as_string().c_str();
-	    unsigned short postalCode = static_cast<unsigned short>(std::stoi(location["postCode"].as_string().c_str()));
+	    try {
+	        auto name = obj["name"].as_object();
+	        auto location = obj["location"].as_object();
+	        auto dob = obj["dateOfBirth"].as_object();
 
-	    std::string additionalInfo = std::string(obj["email"].as_string().c_str());
+	        std::string firstName = name["firstName"].as_string().c_str();
+	        std::string lastName = name["lastName"].as_string().c_str();
+	        std::string street = location["street"].as_string().c_str();
+	        std::string cityName = location["city"].as_string().c_str();
+	        std::string email = obj["email"].as_string().c_str();
 
-	    json::object dob = obj["dateOfBirth"].as_object();
-	    int day = dob["day"].as_int64() + 1;
-	    int month = dob["month"].as_int64() + 1;
-	    int year = dob["year"].as_int64() + 1900;
+	        unsigned short postalCode = 0;
+	        try {
+	            postalCode = static_cast<unsigned short>(std::stoi(location["postCode"].as_string().c_str()));
+	        } catch (...) {
+	            std::cerr << "Warning: Invalid postalCode, using 0.\n";
+	        }
 
-	    cout << "---- Student #" << i + 1 << " ----" << endl;
-	    cout << "First Name       : " << firstName << endl;
-	    cout << "Last Name       : " << lastName << endl;
-	    cout << "Street    : " << street << endl;
-	    cout << "Postal Code    : " << postalCode << endl;
-	    cout << "City    : " << cityName << endl;
-	    cout << "Day : " << day << endl;
-	    cout << "Month : " << month << endl;
-	    cout << "Year : " << year << endl;
-	    cout << "Additional Info : " << additionalInfo << endl;
-	    cout << endl;
+	        int day = dob["day"].as_int64() + 1;
+	        int month = dob["month"].as_int64() + 1;
+	        int year = dob["year"].as_int64() + 1900;
 
+	        cout << "---- Student #" << i + 1 << " ----" << endl;
+	        cout << "First Name       : " << firstName << endl;
+	        cout << "Last Name        : " << lastName << endl;
+	        cout << "Street           : " << street << endl;
+	        cout << "Postal Code      : " << postalCode << endl;
+	        cout << "City             : " << cityName << endl;
+	        cout << "Day              : " << day << endl;
+	        cout << "Month            : " << month << endl;
+	        cout << "Year             : " << year << endl;
+	        cout << "Additional Info  : " << email << endl;
+
+	        Poco::Data::Date dateOfBirth = { year, month, day };
+	        Student student(firstName, lastName, dateOfBirth, street, postalCode, cityName, email);
+	        db->setStudent(student);
+
+	        ++i; // only increment if all went well
+	    } catch (const std::exception& e) {
+	        std::cerr << "Failed to process student #" << i + 1 << ": " << e.what() << std::endl;
+	    }
 	}
+
 
 	stream << "quit\n";
 	stream.flush();
